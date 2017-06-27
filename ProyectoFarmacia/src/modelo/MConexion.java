@@ -3,14 +3,14 @@ package modelo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class Conexion {
+public class MConexion {
 	//Campos o atributos
 	private String Driver = "com.mysql.jdbc.Driver";
 	private String URL = "jdbc:mysql://localhost:3306/bd_farmacia"; //Conexión BD_Farmacia
 	private String User = "root";
 	private String Password = "";
 	//Constructor
-	public Conexion() {
+	public MConexion() {
 	}
 	//Métodos
 	public Connection Conectar(){
