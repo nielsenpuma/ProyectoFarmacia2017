@@ -1,5 +1,5 @@
 package img;
 
 public class Prueba {
-	//Comentario
+	private String lamamireyder;
 }
