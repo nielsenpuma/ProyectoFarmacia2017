@@ -12,7 +12,6 @@ public class MCliente {
 	//Campos o atributos
 	private MConexion mysql = new MConexion();
 	private Connection cn = mysql.Conectar(); //Almacenando la conexión
-	
 	private Statement Cmd;
 	private CallableStatement Stm;
 	private ResultSet Rs;
