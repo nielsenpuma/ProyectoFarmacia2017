@@ -18,8 +18,7 @@ public class MCliente {
 	private ArrayList<ECliente> Lista;
 	
 	//Constructor 
-	public MCliente() {		
-	}
+	public MCliente() {	}
 	
 	//Mètodos
 	//Método Listar 
@@ -89,7 +88,7 @@ public class MCliente {
 	}
 	// Método para insertar
 	public void InsertarCliente(ECliente ObjP){
-		String SQL = "CALL InsertarCliente(?,?,?,?,?,?,?,?,?)";
+		String SQL = "CALL InsertarCliente(?,?,?,?,?,?)";
 		try {
 				Stm = cn.prepareCall(SQL);
 				Stm.setString(1, ObjP.getCod_cli());

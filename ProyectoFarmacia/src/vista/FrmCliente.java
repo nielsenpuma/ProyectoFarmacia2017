@@ -10,6 +10,7 @@ import java.awt.Window.Type;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -25,15 +26,19 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ScrollPaneConstants;
 
 //Campos o Atributos
 
 public class FrmCliente extends JFrame {
-	
+	// Campos o atributos
 	private CCliente ObjC = new CCliente();
 	private ArrayList<ECliente> MiLista;
-	private DefaultTableModel MiTabla;
-
+	
 	private JPanel contentPane;
 	private JTextField txtCodCliente;
 	private JTextField txtNomCliente;
@@ -42,29 +47,42 @@ public class FrmCliente extends JFrame {
 	private JTextField txtFechaRegCliente;
 	private JTextField txtTelfCliente;
 	private JTable tablaCliente;
+	private DefaultTableModel MiTabla;
 	
-	//Cargar JTable
+	public void Inicializar(){
+		MiLista = new ArrayList<>();
+		MiLista = ObjC.Listar();
+	}
+	
+	public void LimpiarCajas(){
+		txtCodCliente.setText("");
+		txtNomCliente.setText("");
+		txtApPaternoCliente.setText("");
+		txtApMaternoCliente.setText("");
+		txtFechaRegCliente.setText("");
+		txtTelfCliente.setText("");
+		txtCodCliente.requestFocus();
+	}
+	
+	
+		// Cargar el JTable
 		public void CargarJTable(){
 			MiTabla = new DefaultTableModel();
-			String columnas[]={"Código", "Nombre", "Apellido Paterno", "Apellido Materno", "Fec. Registro", "Teléfono"};
-			
-			for (String obj : columnas) {
-				MiTabla.addColumn(obj);
-			}
-			
-			Object filas[][] = new Object[MiLista.size()][4];
-			
+			// Cargar los nombres de Columnas
+			String Columnas[]={"Código", "Nombre", "Apellido Paterno", "Apellido Materno", "Fec. Registro", "Teléfono"};
+			for(String Obj:Columnas)MiTabla.addColumn(Obj);
+			// Cargar las filas
+			Object Filas[][] = new Object[MiLista.size()][6];
 			for (int i = 0; i < MiLista.size(); i++) {
-				filas[i][0] = MiLista.get(i).getCod_cli();
-				filas[i][1] = MiLista.get(i).getNom_cli();
-				filas[i][2] = MiLista.get(i).getApat_cli();
-				filas[i][3] = MiLista.get(i).getAmaT_cli();
-				filas[i][4] = MiLista.get(i).getFec_reg_cli();
-				filas[i][4] = MiLista.get(i).getTlf_cliente();
-				
-				MiTabla.addRow(filas[i]);
+				Filas[i][0] = MiLista.get(i).getCod_cli();
+				Filas[i][1] = MiLista.get(i).getNom_cli();
+				Filas[i][2] = MiLista.get(i).getApat_cli();
+				Filas[i][3] = MiLista.get(i).getAmaT_cli();
+				Filas[i][4] = MiLista.get(i).getFec_reg_cli();
+				Filas[i][5] = MiLista.get(i).getTlf_cliente();
+				MiTabla.addRow(Filas[i]);
 			}
-			
+			// Cargar en el JTabla
 			tablaCliente.setModel(MiTabla);
 		}
 
@@ -151,11 +169,32 @@ public class FrmCliente extends JFrame {
 		contentPane.add(txtTelfCliente);
 		txtTelfCliente.setColumns(10);
 		
+		tablaCliente = new JTable();
 		JButton btnNuevo = new JButton("Nuevo");
+		btnNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ECliente ObjP = new ECliente(
+						txtCodCliente.getText(),
+						txtNomCliente.getText(),
+						txtApPaternoCliente.getText(),
+						txtApMaternoCliente.getText(),
+						txtFechaRegCliente.getText(),
+						txtTelfCliente.getText());
+				ObjC.Insertar(ObjP);
+				JOptionPane.showMessageDialog(null,"CLIENTE AÑADIDO");
+				LimpiarCajas();
+				CargarJTable();
+			}
+		});
 		btnNuevo.setBounds(370, 60, 116, 23);
 		contentPane.add(btnNuevo);
 		
 		JButton btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		btnEditar.setBounds(370, 90, 116, 23);
 		contentPane.add(btnEditar);
 		
@@ -187,10 +226,10 @@ public class FrmCliente extends JFrame {
 		contentPane.add(lblCliente);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setBounds(20, 298, 490, 152);
 		contentPane.add(scrollPane);
-		
-		tablaCliente = new JTable();
+	
 		scrollPane.setViewportView(tablaCliente);
 		
 		JPanel panel_1 = new JPanel();
@@ -211,9 +250,8 @@ public class FrmCliente extends JFrame {
 		lblMantenimiento.setBackground(SystemColor.control);
 		lblMantenimiento.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		//Cargando al inicio los datos en la tabla
-		MiLista = new ArrayList<>();
-		MiLista = ObjC.Listar();
+		// Llamar a Inicializar y VerRegistro
+		Inicializar();
 		CargarJTable();
 	}
 }
