@@ -169,6 +169,19 @@ public class FrmCliente extends JFrame {
 		txtTelfCliente.setColumns(10);
 		
 		tablaCliente = new JTable();
+		tablaCliente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int fila = tablaCliente.getSelectedRow();
+				txtCodCliente.setText(MiLista.get(fila).getCod_cli());
+				txtNomCliente.setText(MiLista.get(fila).getNom_cli());
+				txtApPaternoCliente.setText(MiLista.get(fila).getApat_cli());
+				txtApMaternoCliente.setText(MiLista.get(fila).getAmaT_cli());
+				txtFechaRegCliente.setText(MiLista.get(fila).getFec_reg_cli());
+				txtTelfCliente.setText(MiLista.get(fila).getTlf_cliente());		
+			}
+		});
+		
 		JButton btnNuevo = new JButton("Nuevo");
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
