@@ -18,8 +18,7 @@ public class MCliente {
 	private ArrayList<ECliente> Lista;
 	
 	//Constructor 
-	public MCliente() {
-		
+	public MCliente() {		
 	}
 	
 	//Mètodos
