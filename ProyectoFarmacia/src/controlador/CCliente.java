@@ -24,8 +24,8 @@ public class CCliente {
 		ObjP.InsertarCliente(objP);
 	}
 	//Modificar
-	public void EditarCliente(ECliente objP){
-		ObjP.EditarCliente(objP);
+	public void ModificarCliente(ECliente objP){
+		ObjP.ModificarCliente(objP);
 	}
 	//Eliminar
 	public void EliminarProducto(String Id){

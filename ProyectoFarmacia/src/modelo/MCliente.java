@@ -72,8 +72,8 @@ public class MCliente {
 	}	
 	
 	// Método para modificar
-	public void EditarCliente(ECliente ObjP){
-		String SQL = "CALL EditarCliente(?,?,?,?,?,?)";
+	public void ModificarCliente(ECliente ObjP){
+		String SQL = "CALL ModificarCliente(?,?,?,?,?,?)";
 		try {
 				Stm = cn.prepareCall(SQL);
 				Stm.setString(1, ObjP.getCod_cli());
