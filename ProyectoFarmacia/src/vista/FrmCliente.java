@@ -64,7 +64,6 @@ public class FrmCliente extends JFrame {
 		txtCodCliente.requestFocus();
 	}
 	
-	
 		// Cargar el JTable
 		public void CargarJTable(){
 			MiTabla = new DefaultTableModel();
