@@ -8,13 +8,24 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.ArrayList;
+
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import controlador.CProducto;
+import entidades.EProducto;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
 public class FrmProducto extends JFrame {
+	//atributos
+	private CProducto objP = new CProducto();
+	private ArrayList<EProducto> MiLista;
+	private DefaultTableModel MiTabla;
 
 	private JPanel contentPane;
 	public JPanel panel;
@@ -48,6 +59,28 @@ public class FrmProducto extends JFrame {
 	public JPanel panel_3;
 	public JTable tablaProductos;
 	public JScrollPane scrollPane;
+	//Cargar JTable
+	public void CargarJTable(){
+		MiTabla = new DefaultTableModel();
+		String columnas[]={"Codigo", "Descripcion","Precio","Stock Act","Stock Min","Unidad Med","Fecha Ven","Cod. Lab","Cod.Cat"};
+		for (String obj : columnas) {
+			MiTabla.addColumn(obj);
+		}
+		Object filas[][] = new Object[MiLista.size()][9];
+		for (int i = 0; i < MiLista.size(); i++) {
+			filas[i][0] = MiLista.get(i).getCod_pro();
+			filas[i][1] = MiLista.get(i).getDesc_pro();
+			filas[i][2] = MiLista.get(i).getPre_pro();
+			filas[i][3] = MiLista.get(i).getStk_act();
+			filas[i][4] = MiLista.get(i).getStk_min();
+			filas[i][5] = MiLista.get(i).getUnid_med();
+			filas[i][6] = MiLista.get(i).getFec_ven();
+			filas[i][7] = MiLista.get(i).getCod_lab();
+			filas[i][8] = MiLista.get(i).getCod_cat();			
+			MiTabla.addRow(filas[i]);
+		}
+		tablaProductos.setModel(MiTabla);
+	}
 
 	/**
 	 * Launch the application.
@@ -246,6 +279,10 @@ public class FrmProducto extends JFrame {
 				}
 			}
 		}
+		//cargar
+		MiLista = new ArrayList<>();
+		MiLista = objP.Listar();
+		CargarJTable();
 	}
 
 }

@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import entidades.ELaboratorio;
+import entidades.EProducto;
 public class MLaboratorio {
 	//Campos o atributos
 		private MConexion mysql = new MConexion();
@@ -37,6 +38,61 @@ public class MLaboratorio {
 			}
 			return Lista;
 		}
+		// Método para buscar
+			public ELaboratorio BuscarLaboratorio(int Id){
+				ELaboratorio Obj =null;
+				Obj = null;
+				String SQL = "CALL BuscarLaboratorio(?)";
+				try {
+						Stm = cn.prepareCall(SQL);
+						Stm.setInt(1, Id);
+						Rs = Stm.executeQuery();
+						if(Rs.next()){
+							Obj = new ELaboratorio (
+									Rs.getInt("COD_LAB"),
+									Rs.getString("DESC_LAB")
+								);
+						}
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+				return Obj;
+			}
+			// Método para modificar
+			public void ModificarLaboratorio(ELaboratorio objL ){
+				String SQL = "CALL ModificarLaboratorio(?,?)";
+				try {
+						Stm = cn.prepareCall(SQL);
+						Stm.setInt(1, objL.getCod_lab());
+						Stm.setString(2, objL.getDesc_lab());
+						Stm.executeUpdate();
+				} catch (Exception e) {
+						System.out.println(e.getMessage());
+				}
+			}
+			// Método para insertar
+			public void InsertarLaboratorio(ELaboratorio objL ){
+				String SQL = "CALL InsertarLaboratorio(?,?)";
+				try {
+						Stm = cn.prepareCall(SQL);
+						Stm.setInt(1, objL.getCod_lab());
+						Stm.setString(2, objL.getDesc_lab());
+						Stm.executeUpdate();
+				} catch (Exception e) {
+						System.out.println(e.getMessage());
+				}
+			}
+			// Método para eliminar
+			public void EliminarLaboratorio(int Id ){
+				String SQL = "CALL EliminarLaboratorio(?)";
+				try {
+						Stm = cn.prepareCall(SQL);
+						Stm.setInt(1, Id);
+						Stm.executeUpdate();
+				} catch (Exception e) {
+						System.out.println(e.getMessage());
+				}
+			}
 		//Método para cerrar la conexión al Base de Datos
 		private void CerrarRecursos(){
 			try {
