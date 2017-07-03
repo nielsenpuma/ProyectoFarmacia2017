@@ -16,11 +16,11 @@ public class CCliente {
 		return ObjP.ListarCliente();
 	}
 	//Buscar
-	public ECliente Buscar(String Id){
+	public ECliente BuscarCliente(String Id){
 		return ObjP.BuscarCliente(Id);
 	}
 	//Insertar
-	public void Insertar(ECliente objP){
+	public void InsertarCliente(ECliente objP){
 		ObjP.InsertarCliente(objP);
 	}
 	//Modificar
@@ -28,8 +28,8 @@ public class CCliente {
 		ObjP.ModificarCliente(objP);
 	}
 	//Eliminar
-	public void EliminarProducto(String Id){
-		ObjP.EliminarProducto(Id);
+	public void EliminarCliente(String Id){
+		ObjP.EliminarCliente(Id);
 	}
 	
 }

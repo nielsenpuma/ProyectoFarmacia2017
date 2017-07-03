@@ -31,6 +31,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ScrollPaneConstants;
+import com.toedter.calendar.JDateChooser;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Date;
+import java.awt.Component;
 
 //Campos o Atributos
 
@@ -44,7 +49,6 @@ public class FrmCliente extends JFrame {
 	private JTextField txtNomCliente;
 	private JTextField txtApPaternoCliente;
 	private JTextField txtApMaternoCliente;
-	private JTextField txtFechaRegCliente;
 	private JTextField txtTelfCliente;
 	private JTable tablaCliente;
 	private DefaultTableModel MiTabla;
@@ -59,7 +63,7 @@ public class FrmCliente extends JFrame {
 		txtNomCliente.setText("");
 		txtApPaternoCliente.setText("");
 		txtApMaternoCliente.setText("");
-		txtFechaRegCliente.setText("");
+	
 		txtTelfCliente.setText("");
 		txtCodCliente.requestFocus();
 	}
@@ -69,7 +73,9 @@ public class FrmCliente extends JFrame {
 			MiTabla = new DefaultTableModel();
 			// Cargar los nombres de Columnas
 			String Columnas[]={"Código", "Nombre", "Apellido Paterno", "Apellido Materno", "Fec. Registro", "Teléfono"};
-			for(String Obj:Columnas)MiTabla.addColumn(Obj);
+			for(String Obj:Columnas){
+				MiTabla.addColumn(Obj);
+			}
 			// Cargar las filas
 			Object Filas[][] = new Object[MiLista.size()][6];
 			for (int i = 0; i < MiLista.size(); i++) {
@@ -80,9 +86,11 @@ public class FrmCliente extends JFrame {
 				Filas[i][4] = MiLista.get(i).getFec_reg_cli();
 				Filas[i][5] = MiLista.get(i).getTlf_cliente();
 				MiTabla.addRow(Filas[i]);
+				
 			}
 			// Cargar en el JTabla
 			tablaCliente.setModel(MiTabla);
+			
 		}
 
 	/**
@@ -105,6 +113,18 @@ public class FrmCliente extends JFrame {
 	 * Create the frame.
 	 */
 	public FrmCliente() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				 int confirmed = JOptionPane.showConfirmDialog(null, 
+					        "¿Seguro que desea salir?", "Advertencia",
+					        JOptionPane.YES_NO_OPTION);
+
+					    if (confirmed == JOptionPane.YES_OPTION) {
+					      dispose();
+					    }
+			}
+		});
 		setType(Type.UTILITY);
 		setTitle("Cliente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -158,26 +178,24 @@ public class FrmCliente extends JFrame {
 		contentPane.add(txtApMaternoCliente);
 		txtApMaternoCliente.setColumns(10);
 		
-		txtFechaRegCliente = new JTextField();
-		txtFechaRegCliente.setBounds(96, 180, 100, 20);
-		contentPane.add(txtFechaRegCliente);
-		txtFechaRegCliente.setColumns(10);
-		
 		txtTelfCliente = new JTextField();
 		txtTelfCliente.setBounds(95, 210, 100, 20);
 		contentPane.add(txtTelfCliente);
 		txtTelfCliente.setColumns(10);
+		JDateChooser txtFechaReg = new JDateChooser();
+		txtFechaReg.getCalendarButton().setHorizontalAlignment(SwingConstants.TRAILING);
+		txtFechaReg.setDateFormatString("yyyy-MM-dd");
 		
 		tablaCliente = new JTable();
 		tablaCliente.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent arg0) {			
 				int fila = tablaCliente.getSelectedRow();
 				txtCodCliente.setText(MiLista.get(fila).getCod_cli());
 				txtNomCliente.setText(MiLista.get(fila).getNom_cli());
 				txtApPaternoCliente.setText(MiLista.get(fila).getApat_cli());
 				txtApMaternoCliente.setText(MiLista.get(fila).getAmaT_cli());
-				txtFechaRegCliente.setText(MiLista.get(fila).getFec_reg_cli());
+				txtFechaReg.setDateFormatString(MiLista.get(fila).getFec_reg_cli());
 				txtTelfCliente.setText(MiLista.get(fila).getTlf_cliente());		
 			}
 		});
@@ -190,12 +208,12 @@ public class FrmCliente extends JFrame {
 						txtNomCliente.getText(),
 						txtApPaternoCliente.getText(),
 						txtApMaternoCliente.getText(),
-						txtFechaRegCliente.getText(),
+						txtFechaReg.getDateFormatString(),
 						txtTelfCliente.getText());
-				ObjC.Insertar(ObjP);
+				ObjC.InsertarCliente(ObjP);
 				JOptionPane.showMessageDialog(null,"CLIENTE AÑADIDO");
-				LimpiarCajas();
 				CargarJTable();
+				LimpiarCajas();
 			}
 		});
 		btnNuevo.setBounds(370, 60, 116, 23);
@@ -204,27 +222,49 @@ public class FrmCliente extends JFrame {
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				ECliente ObjP = new ECliente(
+						txtCodCliente.getText(),
+						txtNomCliente.getText(),
+						txtApPaternoCliente.getText(),
+						txtApMaternoCliente.getText(),
+						txtFechaReg.getDateFormatString(),
+						txtTelfCliente.getText());
+				ObjC.ModificarCliente(ObjP);
+				JOptionPane.showMessageDialog(null,"CLIENTE MODIFICADO");
 				
+				CargarJTable();
+				LimpiarCajas();		
 			}
 		});
-		btnEditar.setBounds(370, 90, 116, 23);
+		btnEditar.setBounds(370, 120, 116, 23);
 		contentPane.add(btnEditar);
 		
-		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(370, 120, 116, 23);
-		contentPane.add(btnGuardar);
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ObjC.BuscarCliente(txtCodCliente.getText());
+				CargarJTable();			
+				LimpiarCajas();	
+			}
+		});
+		btnBuscar.setBounds(370, 90, 116, 23);
+		contentPane.add(btnBuscar);
 		
 		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ObjC.EliminarCliente(txtCodCliente.getText());
+				JOptionPane.showMessageDialog(null,"CLIENTE ELIMINADO");
+				CargarJTable();			
+				LimpiarCajas();	
+			}
+		});
 		btnEliminar.setBounds(370, 150, 116, 23);
 		contentPane.add(btnEliminar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(370, 180, 116, 23);
 		contentPane.add(btnCancelar);
-		
-		JButton btnSalir = new JButton("Salir");
-		btnSalir.setBounds(370, 210, 116, 23);
-		contentPane.add(btnSalir);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -262,8 +302,16 @@ public class FrmCliente extends JFrame {
 		lblMantenimiento.setBackground(SystemColor.control);
 		lblMantenimiento.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		// Llamar a Inicializar y VerRegistro
+		txtFechaReg.setBounds(95, 180, 121, 20);
+		contentPane.add(txtFechaReg);
+		
+		JLabel lblCantidadDeClientes = new JLabel("Cantidad de clientes:");
+		lblCantidadDeClientes.setBounds(334, 273, 116, 14);
+		contentPane.add(lblCantidadDeClientes);
+			
+		// Llamar a Inicializar y VerRegistro	 
 		Inicializar();
 		CargarJTable();
+		
 	}
 }

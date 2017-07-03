@@ -103,7 +103,7 @@ public class MCliente {
 		}
 	}
 	// Método para eliminar
-	public void EliminarProducto(String Id){
+	public void EliminarCliente(String Id){
 		String SQL = "CALL EliminarCliente(?)";
 		try {
 				Stm = cn.prepareCall(SQL);
