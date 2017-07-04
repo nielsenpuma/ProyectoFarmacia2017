@@ -30,7 +30,7 @@ drop procedure if exists ModificarCategoria;
 delimiter @@
 create procedure ModificarCategoria(xcod int ,xdescr varchar(45))
 begin
-	update tb_categoria set DESC_CAT=xdescr where COD_CAT=cxod;
+	update tb_categoria set DESC_CAT=xdescr where COD_CAT=xcod;
 end @@
 delimiter;
 -- Elimnar
@@ -135,15 +135,18 @@ drop procedure if exists ListarProducto;
 delimiter @@
 create procedure ListarProducto()
 begin
-	select * from tb_producto;
+	select p.COD_PRO,p.DESC_PRO,p.PRE_PRO,p.STK_ACT,p.STK_MIN,p.UNI_MED,p.FEC_VENC,l.DESC_LAB,c.DESC_CAT 
+    from tb_producto p inner join tb_categoria c
+    on p.COD_CAT=c.COD_CAT inner join tb_laboratorio l
+    on p.COD_LAB=l.COD_LAB;
 end @@
 delimiter;
 -- Buscar
 drop procedure if exists BuscarProducto;
 delimiter @@
-create procedure BuscarProducto(xcod char(5))
+create procedure BuscarProducto(xdes varchar(50))
 begin
-	select * from tb_producto where COD_PRO=xcod;
+	select * from tb_producto where DESC_PRO=xdes;
 end @@
 delimiter;
 -- Insertar
@@ -313,7 +316,7 @@ end @@
 delimiter;
 
 
-
+	
 
 
 

@@ -8,7 +8,7 @@ public class MConexion {
 	private String Driver = "com.mysql.jdbc.Driver";
 	private String URL = "jdbc:mysql://localhost:3306/bd_farmacia"; //Conexi�n BD_Farmacia
 	private String User = "root";
-	private String Password = "mysql";
+	private String Password = "";
 	//Constructor
 	public MConexion() {
 	}

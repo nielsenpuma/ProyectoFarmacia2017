@@ -22,7 +22,7 @@ public class MLaboratorio {
 		//Metodos ListarLabotario
 		public ArrayList<ELaboratorio> ListarLaboratorio(){
 			Lista=new ArrayList<>();
-			String SQL ="CALL ListarLabotarotorio()";
+			String SQL ="CALL ListarLaboratorio()";
 			try {
 				Stm = cn.prepareCall(SQL);
 				Rs=Stm.executeQuery();

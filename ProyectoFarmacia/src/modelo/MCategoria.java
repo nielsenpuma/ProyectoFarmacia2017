@@ -84,7 +84,7 @@ public class MCategoria {
 		}
 		// Método para eliminar
 		public void EliminarCategoria(int Id){
-			String SQL = "CALL EliminaCategoria(?)";
+			String SQL = "CALL EliminarCategoria(?)";
 			try {
 					Stm = cn.prepareCall(SQL);
 					Stm.setInt(1, Id);

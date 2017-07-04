@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
+import entidades.ECategoria;
+import entidades.ELaboratorio;
 import entidades.EProducto;
 
 public class MProducto {
@@ -26,6 +30,13 @@ public class MProducto {
 			Stm = cn.prepareCall(SQL);
 			Rs=Stm.executeQuery();
 			while (Rs.next()) {
+				//Laboratorio
+				ELaboratorio x = new ELaboratorio();
+				x.setDesc_lab(Rs.getString("DESC_LAB"));
+				//Categoria
+				ECategoria c = new ECategoria();
+				c.setDesc_cat(Rs.getString("DESC_CAT"));
+				
 				EProducto objC = new EProducto(
 						Rs.getString("COD_PRO"),
 						Rs.getString("DESC_PRO"),
@@ -34,26 +45,34 @@ public class MProducto {
 						Rs.getInt("STK_MIN"),
 						Rs.getString("UNI_MED"),
 						Rs.getString("FEC_VENC"),
-						Rs.getInt("COD_LAB"),
-						Rs.getInt("COD_CAT")
-						);
+						new ELaboratorio(x.getCod_lab(),x.getDesc_lab()),
+						new ECategoria(c.getCod_cat(),c.getDesc_cat())																	
+						);				
 				Lista.add(objC);
 			}
 		} catch (Exception e) {
-			System.out.println("Error al listar Laboratorio.\n"+e.getMessage());
+			System.out.println("Error al listar Producto.\n"+e.getMessage());
 		}
 		return Lista;
 	}
 	// Método para buscar
-			public EProducto BuscarProducto(String Id){
+			public ArrayList<EProducto> BuscarProducto(String des){
+				des="%"+des+"%";
 				EProducto Obj =null;
+				Lista = new ArrayList<>();
 				Obj = null;
 				String SQL = "CALL BuscarProducto(?)";
 				try {
 						Stm = cn.prepareCall(SQL);
-						Stm.setString(1, Id);
+						Stm.setString(1, des);
 						Rs = Stm.executeQuery();
 						if(Rs.next()){
+							//Laboratorio
+							ELaboratorio x = new ELaboratorio();
+							x.setDesc_lab(Rs.getString("DESC_LAB"));
+							//Categoria
+							ECategoria c = new ECategoria();
+							c.setDesc_cat(Rs.getString("DESC_CAT"));	
 							Obj = new EProducto(
 									Rs.getString("COD_PRO"),
 									Rs.getString("DESC_PRO"),
@@ -62,14 +81,15 @@ public class MProducto {
 									Rs.getInt("STK_MIN"),
 									Rs.getString("UNI_MED"),
 									Rs.getString("FEC_VENC"),
-									Rs.getInt("COD_LAB"),
-									Rs.getInt("COD_CAT")
+									new ELaboratorio(x.getCod_lab(),x.getDesc_lab()),
+									new ECategoria(c.getCod_cat(),c.getDesc_cat())
 								);
+							Lista.add(Obj);
 						}
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
-				return Obj;
+				return Lista;
 			}
 			// Método para modificar
 			public void ModificarProducto(EProducto ObjP){
@@ -83,8 +103,8 @@ public class MProducto {
 						Stm.setInt(5, ObjP.getStk_min());
 						Stm.setString(6, ObjP.getUnid_med());
 						Stm.setString(7, ObjP.getFec_ven());
-						Stm.setInt(8, ObjP.getCod_lab());
-						Stm.setInt(9, ObjP.getCod_cat());
+						Stm.setInt(8, ObjP.getCod_lab().getCod_lab());
+						Stm.setInt(9, ObjP.getCod_cat().getCod_cat());
 						Stm.executeUpdate();
 				} catch (Exception e) {
 						System.out.println(e.getMessage());
@@ -102,8 +122,8 @@ public class MProducto {
 						Stm.setInt(5, ObjP.getStk_min());
 						Stm.setString(6, ObjP.getUnid_med());
 						Stm.setString(7, ObjP.getFec_ven());
-						Stm.setInt(8, ObjP.getCod_lab());
-						Stm.setInt(9, ObjP.getCod_cat());			
+						Stm.setInt(8, ObjP.getCod_lab().getCod_lab());
+						Stm.setInt(9, ObjP.getCod_cat().getCod_cat());			
 						Stm.executeUpdate();
 				} catch (Exception e) {
 						System.out.println(e.getMessage());

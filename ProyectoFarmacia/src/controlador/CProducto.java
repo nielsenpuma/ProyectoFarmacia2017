@@ -18,8 +18,8 @@ public class CProducto {
 		return objP.ListarProducto();
 	}
 	//Busaccr
-	public EProducto Buscar(String Id){
-		return objP.BuscarProducto(Id);
+	public ArrayList<EProducto> Buscar(String des){
+		return objP.BuscarProducto(des);
 	}
 	//Insertar
 	public void Insertar(EProducto ObjP){
@@ -33,5 +33,5 @@ public class CProducto {
 	public void Eliminar(String Id){
 		objP.EliminarProducto(Id);
 	}
-
+	
 }

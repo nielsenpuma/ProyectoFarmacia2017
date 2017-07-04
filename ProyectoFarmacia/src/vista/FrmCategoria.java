@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.util.ArrayList;
 
@@ -20,8 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class FrmCategoria extends JFrame {
+public class FrmCategoria extends JFrame implements ActionListener {
 	//atributos
 	private CCategoria objC = new CCategoria();
 	private ArrayList<ECategoria> MiLista;
@@ -40,13 +44,15 @@ public class FrmCategoria extends JFrame {
 	public JButton btnEditar;
 	public JButton btnGuardar;
 	public JButton btnEliminar;
-	public JButton btnCancelar;
+	public JButton btnBuscar;
 	public JButton btnSalir;
 	public JPanel panel_3;
 	public JTable tablaCategoria;
 	public JScrollPane scrollPane;
 	//Cargar JTable
 			public void CargarJTable(){
+				MiLista = new ArrayList<>();
+				MiLista = objC.Listar();
 				MiTabla = new DefaultTableModel();
 				String columnas[]={"Codigo", "Descripcion"};
 				for (String obj : columnas) {
@@ -59,6 +65,11 @@ public class FrmCategoria extends JFrame {
 					MiTabla.addRow(filas[i]);
 				}
 				tablaCategoria.setModel(MiTabla);
+			}
+			//limpiar cajas
+			public void Limpiar(){
+				txtCodCat.setText("");
+				txtDescCat.setText("");
 			}
 
 	/**
@@ -136,31 +147,37 @@ public class FrmCategoria extends JFrame {
 			panel_2.setLayout(null);
 			{
 				btnNuevo = new JButton("Nuevo");
+				btnNuevo.addActionListener(this);
 				btnNuevo.setBounds(10, 22, 89, 23);
 				panel_2.add(btnNuevo);
 			}
 			{
 				btnEditar = new JButton("Editar");
+				btnEditar.addActionListener(this);
 				btnEditar.setBounds(10, 52, 89, 23);
 				panel_2.add(btnEditar);
 			}
 			{
 				btnGuardar = new JButton("Guardar");
+				btnGuardar.addActionListener(this);
 				btnGuardar.setBounds(10, 86, 89, 23);
 				panel_2.add(btnGuardar);
 			}
 			{
 				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(this);
 				btnEliminar.setBounds(10, 120, 89, 23);
 				panel_2.add(btnEliminar);
 			}
 			{
-				btnCancelar = new JButton("Cancelar");
-				btnCancelar.setBounds(10, 154, 89, 23);
-				panel_2.add(btnCancelar);
+				btnBuscar = new JButton("Buscar");
+				btnBuscar.addActionListener(this);
+				btnBuscar.setBounds(10, 154, 89, 23);
+				panel_2.add(btnBuscar);
 			}
 			{
 				btnSalir = new JButton("Salir");
+				btnSalir.addActionListener(this);
 				btnSalir.setBounds(10, 182, 89, 23);
 				panel_2.add(btnSalir);
 			}
@@ -182,9 +199,70 @@ public class FrmCategoria extends JFrame {
 			}
 		}
 		//cargando al inicio los datos en la tabla
-		MiLista = new ArrayList<>();
-		MiLista = objC.Listar();
 		CargarJTable();
 	}
 
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnSalir) {
+			do_btnSalir_actionPerformed(arg0);
+		}
+		if (arg0.getSource() == btnBuscar) {
+			do_btnBuscar_actionPerformed(arg0);
+		}
+		if (arg0.getSource() == btnEliminar) {
+			do_btnEliminar_actionPerformed(arg0);
+		}
+		if (arg0.getSource() == btnGuardar) {
+			do_btnGuardar_actionPerformed(arg0);
+		}
+		if (arg0.getSource() == btnEditar) {
+			do_btnEditar_actionPerformed(arg0);
+		}
+		if (arg0.getSource() == btnNuevo) {
+			do_btnNuevo_actionPerformed(arg0);
+		}
+	}
+	protected void do_btnNuevo_actionPerformed(ActionEvent arg0) {
+		Limpiar();
+	}
+	protected void do_btnEditar_actionPerformed(ActionEvent arg0) {
+		ECategoria obj = new ECategoria(
+				Integer.parseInt(txtCodCat.getText()),
+				txtDescCat.getText()
+				);
+		objC.Modificar(obj);
+		CargarJTable();
+	}
+	protected void do_btnGuardar_actionPerformed(ActionEvent arg0) {
+		ECategoria obj = new ECategoria(
+				Integer.parseInt(txtCodCat.getText()),
+				txtDescCat.getText()
+				);
+		objC.Insertar(obj);
+		CargarJTable();
+	}
+	protected void do_btnEliminar_actionPerformed(ActionEvent arg0) {
+		int Id = Integer.parseInt(txtCodCat.getText());
+		objC.Eliminar(Id);
+		CargarJTable();
+	}
+	protected void do_btnBuscar_actionPerformed(ActionEvent arg0) {
+		try {
+			int Id = Integer.parseInt(txtCodCat.getText());
+			objC.Buscar(Id);
+			txtCodCat.setText(objC.Buscar(Id).getCod_cat()+"");
+			txtDescCat.setText(objC.Buscar(Id).getDesc_cat());
+			// TODO: handle exception
+		} catch (Exception e) {
+			mensaje("El codigo no existe");
+		}
+	}
+	protected void do_btnSalir_actionPerformed(ActionEvent arg0) {
+		dispose();
+	}
+	//MENSAJE
+  	void mensaje(String s) {
+		JOptionPane.showMessageDialog(this, s);
+	}
+	
 }

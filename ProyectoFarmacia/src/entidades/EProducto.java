@@ -9,12 +9,14 @@ public class EProducto {
 	private int stk_min;
 	private String unid_med;
 	private String fec_ven;
-	private int cod_lab;
-	private int cod_cat;
+	private ELaboratorio cod_lab;
+	private ECategoria cod_cat;
 	//constructor
+	
 	public EProducto(){}
+	
 	public EProducto(String cod_pro, String desc_pro, double pre_pro, int stk_act, int stk_min, String unid_med,
-			String fec_ven, int cod_lab, int cod_cat) {
+			String fec_ven, ELaboratorio cod_lab, ECategoria cod_cat) {
 		this.cod_pro = cod_pro;
 		this.desc_pro = desc_pro;
 		this.pre_pro = pre_pro;
@@ -25,6 +27,7 @@ public class EProducto {
 		this.cod_lab = cod_lab;
 		this.cod_cat = cod_cat;
 	}
+
 	//metodos de lectura y escritura
 	public String getCod_pro() {
 		return cod_pro;
@@ -68,18 +71,16 @@ public class EProducto {
 	public void setFec_ven(String fec_ven) {
 		this.fec_ven = fec_ven;
 	}
-	public int getCod_lab() {
+	public ELaboratorio getCod_lab() {
 		return cod_lab;
 	}
-	public void setCod_lab(int cod_lab) {
+	public void setCod_lab(ELaboratorio cod_lab) {
 		this.cod_lab = cod_lab;
 	}
-	public int getCod_cat() {
+	public ECategoria getCod_cat() {
 		return cod_cat;
 	}
-	public void setCod_cat(int cod_cat) {
+	public void setCod_cat(ECategoria cod_cat) {
 		this.cod_cat = cod_cat;
 	}
-
-
 }
