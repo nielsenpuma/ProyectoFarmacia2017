@@ -2,6 +2,7 @@ package modelo;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -12,18 +13,17 @@ import entidades.EProveedor;
 
 public class MEmpleado {
 	//Campos o atributos
+	
+
 		private MConexion mysql = new MConexion();
-		private Connection cn = mysql.Conectar(); //Almacenando la conexión
-		
+		private Connection cn = mysql.Conectar(); //Almacenando la conexión	
 		private Statement Cmd;
 		private CallableStatement Stm;
 		private ResultSet Rs;
 		private ArrayList<EEmpleado> Lista;
 		
-		//Constructor
-		public MEmpleado() {
-		}
-		
+		//metodo constructor
+		public MEmpleado(){}
 		//Metodos
 		//Metodo Listar 
 		public ArrayList<EEmpleado> ListarEmpleado(){
@@ -35,15 +35,15 @@ public class MEmpleado {
 				
 				while(Rs.next()){
 					EEmpleado ObjP = new EEmpleado(
-							Rs.getString("cod_emp"),
-							Rs.getString("nom_emp"),
-							Rs.getString("apat_emp"),
-							Rs.getString("amat_emp"),
-							Rs.getString("fec_nac_emp"),
-							Rs.getString("fec_ing_emp"),
-							Rs.getString("user_emp"),
-							Rs.getString("pass_emp"),
-							Rs.getInt("cod_cargo")
+							Rs.getString("COD_EMP"),
+							Rs.getString("NOM_EMP"),
+							Rs.getString("APAT_EMP"),
+							Rs.getString("AMAT_EMP"),
+							Rs.getDate("FEC_NAC_EMP"),
+							Rs.getDate("FEC_ING_EMP"),
+							Rs.getString("USER_EMP"),
+							Rs.getString("PASS_EMP"),
+							Rs.getInt("COD_CARGO")
 							);
 					Lista.add(ObjP);
 				}
@@ -52,6 +52,7 @@ public class MEmpleado {
 			}
 			return Lista;
 		}
+
 		// MÃ©todo para buscar
 		public EEmpleado BuscarEmpleado(String Id){
 			EEmpleado Obj =null;
@@ -63,15 +64,15 @@ public class MEmpleado {
 					Rs = Stm.executeQuery();
 					if(Rs.next()){
 						Obj = new EEmpleado(
-								Rs.getString("cod_emp"),
-								Rs.getString("nom_emp"),
-								Rs.getString("apat_emp"),
-								Rs.getString("amat_emp"),
-								Rs.getString("fec_nac_emp"),
-								Rs.getString("fec_ing_emp"),
-								Rs.getString("user_emp"),
-								Rs.getString("pass_emp"),
-								Rs.getInt("cod_cargo")
+								Rs.getString("COD_EMP"),
+								Rs.getString("NOM_EMP"),
+								Rs.getString("APAT_EMP"),
+								Rs.getString("AMAT_EMP"),
+								Rs.getDate("FEC_NAC_EMP"),
+								Rs.getDate("FEC_ING_EMP"),
+								Rs.getString("USER_EMP"),
+								Rs.getString("PASS_EMP"),
+								Rs.getInt("COD_CARGO")
 							);
 					}
 			} catch (Exception e) {
@@ -89,8 +90,8 @@ public class MEmpleado {
 					Stm.setString(2, ObjP.getNom_emp());
 					Stm.setString(3, ObjP.getApat_emp());
 					Stm.setString(4, ObjP.getAmat_emp());
-					Stm.setString(5, ObjP.getFec_nac_emp());
-					Stm.setString(6, ObjP.getFec_ing_emp());
+					Stm.setString(5, ObjP.getFec_nac_emp()+"");
+					Stm.setString(6, ObjP.getFec_ing_emp()+"");
 					Stm.setString(7, ObjP.getUser_emp());
 					Stm.setString(8, ObjP.getPass_emp());
 					Stm.setInt(9, ObjP.getCod_cargo());
@@ -108,8 +109,8 @@ public class MEmpleado {
 					Stm.setString(2, ObjP.getNom_emp());
 					Stm.setString(3, ObjP.getApat_emp());
 					Stm.setString(4, ObjP.getAmat_emp());
-					Stm.setString(5, ObjP.getFec_nac_emp());
-					Stm.setString(6, ObjP.getFec_ing_emp());
+					Stm.setString(5, ObjP.getFec_nac_emp()+"");
+					Stm.setString(6, ObjP.getFec_ing_emp()+"");
 					Stm.setString(7, ObjP.getUser_emp());
 					Stm.setString(8, ObjP.getPass_emp());
 					Stm.setInt(9, ObjP.getCod_cargo());	
@@ -145,6 +146,6 @@ public class MEmpleado {
 		}
 
 		
-	
+
 
 }

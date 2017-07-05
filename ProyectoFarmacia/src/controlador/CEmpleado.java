@@ -20,6 +20,7 @@ public class CEmpleado {
 		public ArrayList<EEmpleado> Listar(){
 			return ObjP.ListarEmpleado();
 		}
+		
 		//Buscar
 		public EEmpleado Buscar(String Id){
 			return ObjP.BuscarEmpleado(Id);
@@ -37,5 +38,5 @@ public class CEmpleado {
 			ObjP.EliminarEmpleado(Id);
 		}
 		
-
+		 
 }

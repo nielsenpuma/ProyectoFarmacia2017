@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
@@ -20,6 +21,8 @@ import entidades.ECliente;
 import entidades.EEmpleado;
 import controlador.CCliente;
 import controlador.CEmpleado;
+import javax.swing.border.TitledBorder;
+import com.toedter.calendar.JDateChooser;
 
 public class FrmEmpleado extends JFrame {
 	
@@ -32,62 +35,66 @@ public class FrmEmpleado extends JFrame {
 	private JTextField txtNombre;
 	private JTextField txtPat;
 	private JTextField txtMat;
-	private JTextField txtNaci;
-	private JTextField txtFecIng;
 	private JTextField txtCodCargo;
 	private JTextField txtusuario;
 	private JTextField txtpassword;
 	private JTable table;
 	private DefaultTableModel MiTabla;
+	private JPanel panel_1;
+	private JDateChooser dcNac;
+	private JDateChooser dcIng;
 	
 	
 	
-	public void Inicializar(){
-		MiLista = new ArrayList<>();
-		MiLista = ObjC.Listar();
-	}
 	
 	public void LimpiarCajas(){
 		txtCodigo.setText("");
 		txtNombre.setText("");
 		txtPat.setText("");
 		txtMat.setText("");
-		txtNaci.setText("");
-		txtFecIng.setText("");
+		dcNac.setDate(new Date());
+		dcIng.setDate(new Date());
 		txtusuario.setText("");
 		txtpassword.setText("");
 		txtCodCargo.setText("");
 		txtCodigo.requestFocus();
 	}
+
 	
 	
 	
 	// Cargar el JTable
-	public void CargarJTable(){
-		MiTabla = new DefaultTableModel();
-		// Cargar los nombres de Columnas
-		String Columnas[]={"codigo", "Nombre", "Apellido Paterno", "Apellido Materno", "Fec. Nacimiento", "Fec. Ingreso,"
-				+ "Usuario"+"Password"+"Codigo cargo"};
-		for(String Obj:Columnas)MiTabla.addColumn(Obj);
-		// Cargar las filas
-		Object Filas[][] = new Object[MiLista.size()][9];
-		for (int i = 0; i < MiLista.size(); i++) {
-			Filas[i][0] = MiLista.get(i).getCod_emp();
-			Filas[i][1] = MiLista.get(i).getNom_emp();
-			Filas[i][2] = MiLista.get(i).getApat_emp();
-			Filas[i][3] = MiLista.get(i).getAmat_emp();
-			Filas[i][4] = MiLista.get(i).getFec_nac_emp();
-			Filas[i][5] = MiLista.get(i).getFec_ing_emp();
-			Filas[i][6] = MiLista.get(i).getUser_emp();
-			Filas[i][7] = MiLista.get(i).getPass_emp();
-			Filas[i][8] = MiLista.get(i).getCod_cargo();
+		public void CargarJTable(){
+			MiLista = new ArrayList<>();
+			MiLista = ObjC.Listar();
 			
-			MiTabla.addRow(Filas[i]);
+			MiTabla = new DefaultTableModel();
+			// Cargar los nombres de Columnas
+			String Columnas[]={"codigo", "Nombre", "Apellido Paterno",
+								"Apellido Materno", "Fec. Nacimiento",
+								"Fec. Ingreso", "Usuario","Password","Codigo cargo"};
+			for(String Obj:Columnas)
+			{
+				MiTabla.addColumn(Obj);
+										}
+			// Cargar las filas
+			Object Filas[][] = new Object[MiLista.size()][9];
+			for (int i = 0; i < MiLista.size(); i++) {
+				Filas[i][0] = MiLista.get(i).getCod_emp();
+				Filas[i][1] = MiLista.get(i).getNom_emp();
+				Filas[i][2] = MiLista.get(i).getApat_emp();
+				Filas[i][3] = MiLista.get(i).getAmat_emp();
+				Filas[i][4] = MiLista.get(i).getFec_nac_emp();
+				Filas[i][5] = MiLista.get(i).getFec_ing_emp();
+				Filas[i][6] = MiLista.get(i).getUser_emp();
+				Filas[i][7] = MiLista.get(i).getPass_emp();
+				Filas[i][8] = MiLista.get(i).getCod_cargo();
+				
+				MiTabla.addRow(Filas[i]);
+			}
+			// Cargar en el JTabla
+			table.setModel(MiTabla);
 		}
-		// Cargar en el JTabla
-		table.setModel(MiTabla);
-	}
-	
 	
 	
 	
@@ -124,83 +131,81 @@ public class FrmEmpleado extends JFrame {
 		
 		JLabel lblCodigoEmpleado = new JLabel("Codigo Empleado :");
 		lblCodigoEmpleado.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblCodigoEmpleado.setBounds(10, 59, 108, 14);
+		lblCodigoEmpleado.setBounds(20, 72, 108, 14);
 		contentPane.add(lblCodigoEmpleado);
 		
 		JLabel lblNombre = new JLabel("Nombres :");
-		lblNombre.setBounds(10, 84, 108, 14);
+		lblNombre.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblNombre.setBounds(20, 97, 108, 14);
 		contentPane.add(lblNombre);
 		
 		JLabel lblApPaterno = new JLabel("Ap. Paterno :");
-		lblApPaterno.setBounds(10, 109, 108, 14);
+		lblApPaterno.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblApPaterno.setBounds(20, 122, 108, 14);
 		contentPane.add(lblApPaterno);
 		
 		JLabel lblApMaterno = new JLabel("Ap. Materno :");
-		lblApMaterno.setBounds(10, 137, 108, 14);
+		lblApMaterno.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblApMaterno.setBounds(20, 147, 108, 14);
 		contentPane.add(lblApMaterno);
 		
 		JLabel lblFecNacimiento = new JLabel("Fec. Nacimiento :");
-		lblFecNacimiento.setBounds(10, 162, 108, 14);
+		lblFecNacimiento.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFecNacimiento.setBounds(20, 172, 108, 14);
 		contentPane.add(lblFecNacimiento);
 		
 		JLabel lblFecIngreso = new JLabel("Fec. Ingreso :");
-		lblFecIngreso.setBounds(10, 187, 108, 14);
+		lblFecIngreso.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFecIngreso.setBounds(20, 197, 108, 14);
 		contentPane.add(lblFecIngreso);
 		
 		JLabel lblUsuario = new JLabel("Usuario :");
-		lblUsuario.setBounds(348, 60, 84, 14);
+		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblUsuario.setBounds(405, 59, 84, 14);
 		contentPane.add(lblUsuario);
 		
 		JLabel lblPassword = new JLabel("Password : ");
-		lblPassword.setBounds(348, 84, 84, 14);
+		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblPassword.setBounds(405, 84, 84, 14);
 		contentPane.add(lblPassword);
 		
 		JLabel lblCodigoCargo = new JLabel("Codigo Cargo :");
-		lblCodigoCargo.setBounds(10, 223, 108, 14);
+		lblCodigoCargo.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblCodigoCargo.setBounds(20, 222, 108, 14);
 		contentPane.add(lblCodigoCargo);
 		
 		txtCodigo = new JTextField();
-		txtCodigo.setBounds(143, 53, 98, 20);
+		txtCodigo.setBounds(138, 70, 195, 20);
 		contentPane.add(txtCodigo);
 		txtCodigo.setColumns(10);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(143, 81, 195, 20);
+		txtNombre.setBounds(138, 95, 195, 20);
 		contentPane.add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		txtPat = new JTextField();
-		txtPat.setBounds(143, 106, 98, 20);
+		txtPat.setBounds(138, 120, 195, 20);
 		contentPane.add(txtPat);
 		txtPat.setColumns(10);
 		
 		txtMat = new JTextField();
-		txtMat.setBounds(143, 134, 98, 20);
+		txtMat.setBounds(138, 145, 195, 20);
 		contentPane.add(txtMat);
 		txtMat.setColumns(10);
 		
-		txtNaci = new JTextField();
-		txtNaci.setBounds(143, 159, 98, 20);
-		contentPane.add(txtNaci);
-		txtNaci.setColumns(10);
-		
-		txtFecIng = new JTextField();
-		txtFecIng.setBounds(143, 184, 98, 20);
-		contentPane.add(txtFecIng);
-		txtFecIng.setColumns(10);
-		
 		txtCodCargo = new JTextField();
-		txtCodCargo.setBounds(143, 220, 98, 20);
+		txtCodCargo.setBounds(138, 220, 195, 20);
 		contentPane.add(txtCodCargo);
 		txtCodCargo.setColumns(10);
 		
 		txtusuario = new JTextField();
-		txtusuario.setBounds(430, 57, 86, 20);
+		txtusuario.setBounds(499, 57, 195, 20);
 		contentPane.add(txtusuario);
 		txtusuario.setColumns(10);
 		
 		txtpassword = new JTextField();
-		txtpassword.setBounds(430, 81, 86, 20);
+		txtpassword.setBounds(499, 82, 195, 20);
 		contentPane.add(txtpassword);
 		txtpassword.setColumns(10);
 		
@@ -217,37 +222,53 @@ public class FrmEmpleado extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(30, 274, 914, 217);
+		panel.setBorder(new TitledBorder(null, "Lista Empleados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(10, 251, 934, 240);
 		contentPane.add(panel);
+		{
+			panel_1 = new JPanel();
+			panel_1.setBorder(new TitledBorder(null, "Mantenimiento", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel_1.setBounds(718, 30, 226, 233);
+			contentPane.add(panel_1);
+			panel_1.setLayout(null);
+			
+			JButton btnNuevo = new JButton("NUEVO");
+			btnNuevo.setBounds(25, 50, 180, 23);
+			panel_1.add(btnNuevo);
+			
+			JButton btnBuscar = new JButton("BUSCAR");
+			btnBuscar.setBounds(25, 84, 180, 23);
+			panel_1.add(btnBuscar);
+			
+			JButton btnInsertar = new JButton("INSERTAR");
+			btnInsertar.setBounds(25, 118, 180, 23);
+			panel_1.add(btnInsertar);
+			
+			JButton btnModificar = new JButton("MODIFICAR");
+			btnModificar.setBounds(25, 152, 180, 23);
+			panel_1.add(btnModificar);
+			
+			JButton btnEliminar = new JButton("ELIMINAR");
+			btnEliminar.setBounds(25, 186, 180, 23);
+			panel_1.add(btnEliminar);
+		}
+		{
+			dcNac = new JDateChooser();
+			dcNac.setDateFormatString("yyyy-MMM-dd");
+			dcNac.setBounds(138, 172, 130, 20);
+			contentPane.add(dcNac);
+		}
+		{
+			dcIng = new JDateChooser();
+			dcIng.setDateFormatString("yyyy-MMM-dd");
+			dcIng.setBounds(138, 197, 130, 20);
+			contentPane.add(dcIng);
+		}
 		
-		JLabel lblListarEmpleados = new JLabel("Listar Empleados");
-		lblListarEmpleados.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblListarEmpleados.setBounds(20, 248, 128, 14);
-		contentPane.add(lblListarEmpleados);
 		
-		JButton btnBuscar = new JButton("BUSCAR");
-		btnBuscar.setBounds(589, 128, 108, 23);
-		contentPane.add(btnBuscar);
-		
-		JButton btnInsertar = new JButton("INSERTAR");
-		btnInsertar.setBounds(589, 153, 108, 23);
-		contentPane.add(btnInsertar);
-		
-		JButton btnModificar = new JButton("MODIFICAR");
-		btnModificar.setBounds(589, 183, 108, 23);
-		contentPane.add(btnModificar);
-		
-		JButton btnEliminar = new JButton("ELIMINAR");
-		btnEliminar.setBounds(589, 214, 108, 23);
-		contentPane.add(btnEliminar);
-		
-		JButton btnNuevo = new JButton("NUEVO");
-		btnNuevo.setBounds(589, 75, 108, 23);
-		contentPane.add(btnNuevo);
-		
-		
-		// Llamar a Inicializar y VerRegistro
-				Inicializar();
-				CargarJTable();
+		//cargar inicialmente el formulario
+		MiLista= new ArrayList<>();
+		MiLista=ObjC.Listar();
+		CargarJTable();
 	}
 }
