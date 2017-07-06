@@ -1,43 +1,36 @@
 package vista;
-
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.Window.Type;
-import java.util.ArrayList;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.Font;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-
-import controlador.CCliente;
-import entidades.ECliente;
-
-import java.awt.Color;
-import java.awt.SystemColor;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.ScrollPaneConstants;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.DateFormat;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.ScrollPaneConstants;
-import com.toedter.calendar.JDateChooser;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.sql.Date;
+import java.awt.Window.Type;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Color;
 import java.awt.Component;
-
-//Campos o Atributos
+import java.awt.SystemColor;
+import java.util.ArrayList;
+import com.toedter.calendar.JDateChooser;
+import controlador.CCliente;
+import entidades.ECliente;
 
 public class FrmCliente extends JFrame {
 	// Campos o atributos
@@ -52,6 +45,7 @@ public class FrmCliente extends JFrame {
 	private JTextField txtTelfCliente;
 	private JTable tablaCliente;
 	private DefaultTableModel MiTabla;
+	JDateChooser JDCFechaReg = new JDateChooser();
 	
 	public void Inicializar(){
 		MiLista = new ArrayList<>();
@@ -63,7 +57,7 @@ public class FrmCliente extends JFrame {
 		txtNomCliente.setText("");
 		txtApPaternoCliente.setText("");
 		txtApMaternoCliente.setText("");
-	
+		JDCFechaReg.setDateFormatString("");;
 		txtTelfCliente.setText("");
 		txtCodCliente.requestFocus();
 	}
@@ -119,7 +113,6 @@ public class FrmCliente extends JFrame {
 				 int confirmed = JOptionPane.showConfirmDialog(null, 
 					        "¿Seguro que desea salir?", "Advertencia",
 					        JOptionPane.YES_NO_OPTION);
-
 					    if (confirmed == JOptionPane.YES_OPTION) {
 					      dispose();
 					    }
@@ -182,11 +175,13 @@ public class FrmCliente extends JFrame {
 		txtTelfCliente.setBounds(95, 210, 100, 20);
 		contentPane.add(txtTelfCliente);
 		txtTelfCliente.setColumns(10);
-		JDateChooser txtFechaReg = new JDateChooser();
-		txtFechaReg.getCalendarButton().setHorizontalAlignment(SwingConstants.TRAILING);
-		txtFechaReg.setDateFormatString("yyyy-MM-dd");
 		
 		tablaCliente = new JTable();
+		JDCFechaReg.setDateFormatString("yyyy/MM/dd");
+		
+		JDCFechaReg.setBounds(95, 179, 100, 20);
+		contentPane.add(JDCFechaReg);
+	
 		tablaCliente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {			
@@ -195,12 +190,12 @@ public class FrmCliente extends JFrame {
 				txtNomCliente.setText(MiLista.get(fila).getNom_cli());
 				txtApPaternoCliente.setText(MiLista.get(fila).getApat_cli());
 				txtApMaternoCliente.setText(MiLista.get(fila).getAmaT_cli());
-				txtFechaReg.setDateFormatString(MiLista.get(fila).getFec_reg_cli());
+				JDCFechaReg.setDate(MiLista.get(fila).getFec_reg_cli());
 				txtTelfCliente.setText(MiLista.get(fila).getTlf_cliente());		
 			}
 		});
 		
-		JButton btnNuevo = new JButton("Nuevo");
+		JButton btnNuevo = new JButton("Insertar");
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ECliente ObjP = new ECliente(
@@ -208,12 +203,14 @@ public class FrmCliente extends JFrame {
 						txtNomCliente.getText(),
 						txtApPaternoCliente.getText(),
 						txtApMaternoCliente.getText(),
-						txtFechaReg.getDateFormatString(),
+						JDCFechaReg.getDate(),
 						txtTelfCliente.getText());
-				ObjC.InsertarCliente(ObjP);
-				JOptionPane.showMessageDialog(null,"CLIENTE AÑADIDO");
-				CargarJTable();
-				LimpiarCajas();
+	
+					ObjC.InsertarCliente(ObjP);
+					Inicializar();
+					CargarJTable();
+					LimpiarCajas();
+					JOptionPane.showMessageDialog(null,"El cliente se añadió con éxito");
 			}
 		});
 		btnNuevo.setBounds(370, 60, 116, 23);
@@ -227,13 +224,13 @@ public class FrmCliente extends JFrame {
 						txtNomCliente.getText(),
 						txtApPaternoCliente.getText(),
 						txtApMaternoCliente.getText(),
-						txtFechaReg.getDateFormatString(),
+						JDCFechaReg.getDate(),
 						txtTelfCliente.getText());
 				ObjC.ModificarCliente(ObjP);
-				JOptionPane.showMessageDialog(null,"CLIENTE MODIFICADO");
-				
+				Inicializar();
 				CargarJTable();
-				LimpiarCajas();		
+				LimpiarCajas();	
+				JOptionPane.showMessageDialog(null,"Cliente moodificado");
 			}
 		});
 		btnEditar.setBounds(370, 120, 116, 23);
@@ -243,6 +240,7 @@ public class FrmCliente extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ObjC.BuscarCliente(txtCodCliente.getText());
+				Inicializar();
 				CargarJTable();			
 				LimpiarCajas();	
 			}
@@ -254,9 +252,10 @@ public class FrmCliente extends JFrame {
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ObjC.EliminarCliente(txtCodCliente.getText());
-				JOptionPane.showMessageDialog(null,"CLIENTE ELIMINADO");
+				Inicializar();
 				CargarJTable();			
 				LimpiarCajas();	
+				JOptionPane.showMessageDialog(null,"Cliente eliminado");
 			}
 		});
 		btnEliminar.setBounds(370, 150, 116, 23);
@@ -280,9 +279,8 @@ public class FrmCliente extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setBounds(20, 298, 490, 152);
-		contentPane.add(scrollPane);
-	
 		scrollPane.setViewportView(tablaCliente);
+		contentPane.add(scrollPane);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -301,9 +299,6 @@ public class FrmCliente extends JFrame {
 		contentPane.add(lblMantenimiento);
 		lblMantenimiento.setBackground(SystemColor.control);
 		lblMantenimiento.setFont(new Font("Tahoma", Font.BOLD, 11));
-		
-		txtFechaReg.setBounds(95, 180, 121, 20);
-		contentPane.add(txtFechaReg);
 		
 		JLabel lblCantidadDeClientes = new JLabel("Cantidad de clientes:");
 		lblCantidadDeClientes.setBounds(334, 273, 116, 14);
