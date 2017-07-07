@@ -38,5 +38,9 @@ public class CEmpleado {
 			ObjP.EliminarEmpleado(Id);
 		}
 		
+		//Autentificar
+		public EEmpleado Autentificar(String user, String password){
+			return ObjP.AutentificarUsuario(user, password);
+		}
 		 
 }

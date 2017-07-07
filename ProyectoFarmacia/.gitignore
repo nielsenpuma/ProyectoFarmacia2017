@@ -1,5 +1,4 @@
 /bin/
 
-# Ignoreando el archivo conexión
-src/modelo/MConexion.java
+# Ignorando el archivo conexión
 src/modelo/MConexion.java
