@@ -1,1 +1,4 @@
 /bin/
+
+# Ignorando el archivo conexión
+src/modelo/MConexion.java

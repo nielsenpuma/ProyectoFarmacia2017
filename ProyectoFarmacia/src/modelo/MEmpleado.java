@@ -144,6 +144,35 @@ public class MEmpleado {
 				System.out.println(e.getMessage());
 			}
 		}
+		
+		//Método para autentificar el usuario del sistema
+		public EEmpleado AutentificarUsuario(String user, String password){
+			EEmpleado Obj =null;
+			Obj = null;
+			String SQL = "CALL AutentificarUsuario(?,?)";
+			try {
+					Stm = cn.prepareCall(SQL);
+					Stm.setString(1, user);
+					Stm.setString(2, password);
+					Rs = Stm.executeQuery();
+					if(Rs.next()){
+						Obj = new EEmpleado(
+								Rs.getString("COD_EMP"),
+								Rs.getString("NOM_EMP"),
+								Rs.getString("APAT_EMP"),
+								Rs.getString("AMAT_EMP"),
+								Rs.getDate("FEC_NAC_EMP"),
+								Rs.getDate("FEC_ING_EMP"),
+								Rs.getString("USER_EMP"),
+								Rs.getString("PASS_EMP"),
+								Rs.getInt("COD_CARGO")
+							);
+					}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+			return Obj;
+		}
 
 		
 
