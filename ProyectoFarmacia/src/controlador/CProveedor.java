@@ -19,4 +19,23 @@ public class CProveedor {
 		return ObjM.ListarProveedor();
 	}
 	
+	//Método Buscar
+	public EProveedor Buscar(String id){
+		return ObjM.BuscarProveedor(id);
+	}
+	
+	//Método Insertar
+	public void Insertar(EProveedor obj){
+		ObjM.InsertarProveedor(obj);
+	}
+	
+	//Método Modificar
+	public void Modificar(EProveedor obj){
+		ObjM.ModificarProveedor(obj);
+	}
+	
+	//Método Eliminar
+	public void Eliminar(String id){
+		ObjM.EliminarProveedor(id);
+	}
 }
