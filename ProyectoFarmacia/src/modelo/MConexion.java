@@ -6,13 +6,13 @@ import java.sql.DriverManager;
 public class MConexion {
 	//Campos o atributos
 	private String Driver = "com.mysql.jdbc.Driver";
-	private String URL = "jdbc:mysql://localhost:3306/bd_farmacia"; //Conexi�n BD_Farmacia
+	private String URL = "jdbc:mysql://localhost:3306/bd_farmacia"; //Conexión BD_Farmacia
 	private String User = "root";
 	private String Password = "123456";
 	//Constructor
 	public MConexion() {
 	}
-	//Métodos
+	//MÃ©todos
 	public Connection Conectar(){
 		Connection cn = null;
 		try {

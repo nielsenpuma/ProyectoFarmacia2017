@@ -57,7 +57,10 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	
-	
+	public void Inicializar(){
+	MiLista = new ArrayList<>();
+	MiLista = ObjC.Listar();
+	}
 	
 	public void LimpiarCajas(){
 		txtCodigo.setText("");
@@ -77,8 +80,7 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 	
 	// Cargar el JTable
 		public void CargarJTable(){
-			MiLista = new ArrayList<>();
-			MiLista = ObjC.Listar();
+		
 			
 			MiTabla = new DefaultTableModel();
 			// Cargar los nombres de Columnas
@@ -356,7 +358,7 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 				
 				ObjC.Insertar(obj);
 				CargarJTable();
-			//	Inicializar();
+				Inicializar();
 				JOptionPane.showMessageDialog(null,"***EMPLEADO AÑADIDO***");
 				LimpiarCajas();
 		
@@ -402,18 +404,19 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 				
 		ObjC. ModificarEmpleado(ObjP);
 		JOptionPane.showMessageDialog(null,"***EMPLEADO MODIFICADO***");
-		//Inicializar();
+		Inicializar();
 		CargarJTable();
 		LimpiarCajas();	
+
 		
 	}
 	protected void actionPerformedBtnEliminar(ActionEvent arg0) {
 		
 		ObjC.EliminarEmpleado(txtCodigo.getText());
-		JOptionPane.showMessageDialog(null,"***EMPLEADO RETIRADO***");
 		LimpiarCajas();
 		CargarJTable();
-		//Inicializar();
+		JOptionPane.showMessageDialog(null,"***EMPLEADO RETIRADO***");
+		Inicializar();
 		
 	}
 }

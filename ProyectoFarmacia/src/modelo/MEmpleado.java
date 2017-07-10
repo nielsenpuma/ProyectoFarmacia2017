@@ -10,17 +10,20 @@ import java.util.ArrayList;
 import entidades.ECliente;
 import entidades.EEmpleado;
 import entidades.EProveedor;
+import java.text.SimpleDateFormat;
 
 public class MEmpleado {
 	//Campos o atributos
 	
 
 		private MConexion mysql = new MConexion();
-		private Connection cn = mysql.Conectar(); //Almacenando la conexión	
+		private Connection cn = mysql.Conectar(); //Almacenando la conexiï¿½n	
 		private Statement Cmd;
 		private CallableStatement Stm;
 		private ResultSet Rs;
 		private ArrayList<EEmpleado> Lista;
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		
 		//metodo constructor
 		public MEmpleado(){}
@@ -90,8 +93,8 @@ public class MEmpleado {
 					Stm.setString(2, ObjP.getNom_emp());
 					Stm.setString(3, ObjP.getApat_emp());
 					Stm.setString(4, ObjP.getAmat_emp());
-					Stm.setString(5, ObjP.getFec_nac_emp()+"");
-					Stm.setString(6, ObjP.getFec_ing_emp()+"");
+					Stm.setString(5, sdf.format(ObjP.getFec_ing_emp()));
+					Stm.setString(6, sdf.format(ObjP.getFec_ing_emp()));
 					Stm.setString(7, ObjP.getUser_emp());
 					Stm.setString(8, ObjP.getPass_emp());
 					Stm.setInt(9, ObjP.getCod_cargo());
@@ -109,8 +112,8 @@ public class MEmpleado {
 					Stm.setString(2, ObjP.getNom_emp());
 					Stm.setString(3, ObjP.getApat_emp());
 					Stm.setString(4, ObjP.getAmat_emp());
-					Stm.setString(5, ObjP.getFec_nac_emp()+"");
-					Stm.setString(6, ObjP.getFec_ing_emp()+"");
+					Stm.setString(5, sdf.format(ObjP.getFec_ing_emp()));
+					Stm.setString(6, sdf.format(ObjP.getFec_ing_emp()));
 					Stm.setString(7, ObjP.getUser_emp());
 					Stm.setString(8, ObjP.getPass_emp());
 					Stm.setInt(9, ObjP.getCod_cargo());	
@@ -145,7 +148,7 @@ public class MEmpleado {
 			}
 		}
 		
-		//Método para autentificar el usuario del sistema
+		//Mï¿½todo para autentificar el usuario del sistema
 		public EEmpleado AutentificarUsuario(String user, String password){
 			EEmpleado Obj =null;
 			Obj = null;
