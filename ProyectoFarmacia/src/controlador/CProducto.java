@@ -18,7 +18,7 @@ public class CProducto {
 		return objP.ListarProducto();
 	}
 	//Busaccr
-	public ArrayList<EProducto> Buscar(String des){
+	public EProducto Buscar(String des){
 		return objP.BuscarProducto(des);
 	}
 	//Insertar

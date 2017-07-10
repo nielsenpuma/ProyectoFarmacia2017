@@ -41,7 +41,6 @@ public class MLaboratorio {
 		// Método para buscar
 			public ELaboratorio BuscarLaboratorio(int Id){
 				ELaboratorio Obj =null;
-				Obj = null;
 				String SQL = "CALL BuscarLaboratorio(?)";
 				try {
 						Stm = cn.prepareCall(SQL);
