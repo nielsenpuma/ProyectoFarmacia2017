@@ -23,8 +23,14 @@ import controlador.CCliente;
 import controlador.CEmpleado;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.awt.event.MouseEvent;
 
-public class FrmEmpleado extends JFrame {
+public class FrmEmpleado extends JFrame implements ActionListener, MouseListener {
 	
 	// Campos o atributos
 		private CEmpleado ObjC = new CEmpleado();
@@ -43,6 +49,10 @@ public class FrmEmpleado extends JFrame {
 	private JPanel panel_1;
 	private JDateChooser dcNac;
 	private JDateChooser dcIng;
+	private JButton btnNuevo;
+	private JButton btnInsertar;
+	private JButton btnBuscar;
+	private JButton btnModificar;
 	
 	
 	
@@ -219,6 +229,7 @@ public class FrmEmpleado extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(this);
 		scrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
@@ -232,19 +243,23 @@ public class FrmEmpleado extends JFrame {
 			contentPane.add(panel_1);
 			panel_1.setLayout(null);
 			
-			JButton btnNuevo = new JButton("NUEVO");
+			btnNuevo = new JButton("NUEVO");
+			btnNuevo.addActionListener(this);
 			btnNuevo.setBounds(25, 50, 180, 23);
 			panel_1.add(btnNuevo);
 			
-			JButton btnBuscar = new JButton("BUSCAR");
+			btnBuscar = new JButton("BUSCAR");
+			btnBuscar.addActionListener(this);
 			btnBuscar.setBounds(25, 84, 180, 23);
 			panel_1.add(btnBuscar);
 			
-			JButton btnInsertar = new JButton("INSERTAR");
+			btnInsertar = new JButton("INSERTAR");
+			btnInsertar.addActionListener(this);
 			btnInsertar.setBounds(25, 118, 180, 23);
 			panel_1.add(btnInsertar);
 			
-			JButton btnModificar = new JButton("MODIFICAR");
+			btnModificar = new JButton("MODIFICAR");
+			btnModificar.addActionListener(this);
 			btnModificar.setBounds(25, 152, 180, 23);
 			panel_1.add(btnModificar);
 			
@@ -265,10 +280,107 @@ public class FrmEmpleado extends JFrame {
 			contentPane.add(dcIng);
 		}
 		
-		
+	
 		//cargar inicialmente el formulario
 		MiLista= new ArrayList<>();
 		MiLista=ObjC.Listar();
 		CargarJTable();
+		
+	}
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnModificar) {
+			actionPerformedBtnModificar(arg0);
+		}
+		if (arg0.getSource() == btnBuscar) {
+			actionPerformedBtnBuscar(arg0);
+		}
+		if (arg0.getSource() == btnInsertar) {
+			actionPerformedBtnInsertar(arg0);
+		}
+		if (arg0.getSource() == btnNuevo) {
+			actionPerformedBtnNuevo(arg0);
+		}
+	}
+	protected void actionPerformedBtnNuevo(ActionEvent arg0) {
+		
+		LimpiarCajas();
+	}
+	public void mouseClicked(MouseEvent arg0) {
+		if (arg0.getSource() == table) {
+			mouseClickedTable(arg0);
+		}
+	}
+	public void mouseEntered(MouseEvent arg0) {
+	}
+	public void mouseExited(MouseEvent arg0) {
+	}
+	public void mousePressed(MouseEvent arg0) {
+	}
+	public void mouseReleased(MouseEvent arg0) {
+	}
+	protected void mouseClickedTable(MouseEvent arg0) {
+		
+		int fila = table.getSelectedRow();
+		txtCodigo.setText(MiLista.get(fila).getCod_emp());
+		txtNombre.setText(MiLista.get(fila).getNom_emp());
+		txtPat.setText(MiLista.get(fila).getApat_emp());
+		txtMat.setText(MiLista.get(fila).getAmat_emp());
+		dcNac.setDate(MiLista.get(fila).getFec_nac_emp());
+		dcIng.setDate(MiLista.get(fila).getFec_ing_emp());
+		txtCodCargo.setText(String.valueOf(MiLista.get(fila).getCod_cargo()));
+		txtusuario.setText(MiLista.get(fila).getUser_emp());
+		txtpassword.setText(MiLista.get(fila).getPass_emp());
+	}
+	protected void actionPerformedBtnInsertar(ActionEvent arg0) {
+	/*
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		
+		DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
+
+		
+		EEmpleado obj= new EEmpleado(
+				
+				txtCodigo.getText(),
+				txtNombre.getText(),
+				txtPat.getText(),
+				txtMat.getText(),
+				df.getDateInstance(),
+				df2.,
+				txtusuario.getText(),
+				txtpassword.getText(),
+				Integer.parseInt(txtCodCargo.getText())
+				);
+				
+				ObjC.Insertar(obj);
+				CargarJTable();
+		*/
+
+	}
+	
+		protected void actionPerformedBtnBuscar(ActionEvent arg0) {
+		
+			//recuperar la fila con el valor ingresado en txtIdProducto
+			EEmpleado obja= ObjC.Buscar(txtCodigo.getText());
+			
+			//si lo encontro visualizar la informacion del producto
+			if(obja !=null){
+				txtCodigo.setText(obja.getCod_emp());
+				txtNombre.setText(obja.getNom_emp());
+				txtPat.setText(obja.getApat_emp());
+				txtMat.setText(obja.getAmat_emp());
+				dcNac.setDate(obja.getFec_nac_emp());
+				dcIng.setDate(obja.getFec_ing_emp());
+				txtCodCargo.setText(String.valueOf(obja.getCod_cargo()));
+				txtusuario.setText(obja.getUser_emp());
+				txtpassword.setText(obja.getPass_emp());
+						}
+	
+	
+		}	
+		
+	protected void actionPerformedBtnModificar(ActionEvent arg0) {
+		
+		
+		
 	}
 }
