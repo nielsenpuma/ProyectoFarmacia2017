@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +55,7 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 	private JButton btnInsertar;
 	private JButton btnBuscar;
 	private JButton btnModificar;
-	
+	private JButton btnEliminar;
 	
 	
 	
@@ -263,7 +265,8 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 			btnModificar.setBounds(25, 152, 180, 23);
 			panel_1.add(btnModificar);
 			
-			JButton btnEliminar = new JButton("ELIMINAR");
+			btnEliminar = new JButton("ELIMINAR");
+			btnEliminar.addActionListener(this);
 			btnEliminar.setBounds(25, 186, 180, 23);
 			panel_1.add(btnEliminar);
 		}
@@ -282,12 +285,17 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 		
 	
 		//cargar inicialmente el formulario
+	
 		MiLista= new ArrayList<>();
 		MiLista=ObjC.Listar();
 		CargarJTable();
+	
 		
 	}
 	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnEliminar) {
+			actionPerformedBtnEliminar(arg0);
+		}
 		if (arg0.getSource() == btnModificar) {
 			actionPerformedBtnModificar(arg0);
 		}
@@ -332,28 +340,26 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 		txtpassword.setText(MiLista.get(fila).getPass_emp());
 	}
 	protected void actionPerformedBtnInsertar(ActionEvent arg0) {
-	/*
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		
-		DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
+
 
 		
 		EEmpleado obj= new EEmpleado(
-				
 				txtCodigo.getText(),
 				txtNombre.getText(),
 				txtPat.getText(),
 				txtMat.getText(),
-				df.getDateInstance(),
-				df2.,
+				dcNac.getDate(),
+				dcIng.getDate(),
 				txtusuario.getText(),
-				txtpassword.getText(),
-				Integer.parseInt(txtCodCargo.getText())
-				);
+				txtCodCargo.getText(),
+				Integer.parseInt(txtCodCargo.getText()));
 				
 				ObjC.Insertar(obj);
 				CargarJTable();
-		*/
+			//	Inicializar();
+				JOptionPane.showMessageDialog(null,"***EMPLEADO AÑADIDO***");
+				LimpiarCajas();
+		
 
 	}
 	
@@ -373,6 +379,9 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 				txtCodCargo.setText(String.valueOf(obja.getCod_cargo()));
 				txtusuario.setText(obja.getUser_emp());
 				txtpassword.setText(obja.getPass_emp());
+			}else{
+							JOptionPane.showMessageDialog(null,"ERROR,CODIGO NO EXISTE");
+							LimpiarCajas();
 						}
 	
 	
@@ -380,7 +389,31 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 		
 	protected void actionPerformedBtnModificar(ActionEvent arg0) {
 		
+		EEmpleado ObjP = new EEmpleado(
+				txtCodigo.getText(),
+				txtNombre.getText(),
+				txtPat.getText(),
+				txtMat.getText(),
+				dcNac.getDate(),
+				dcIng.getDate(),
+				txtusuario.getText(),
+				txtCodCargo.getText(),
+				Integer.parseInt(txtCodCargo.getText()));
+				
+		ObjC. ModificarEmpleado(ObjP);
+		JOptionPane.showMessageDialog(null,"***EMPLEADO MODIFICADO***");
+		//Inicializar();
+		CargarJTable();
+		LimpiarCajas();	
 		
+	}
+	protected void actionPerformedBtnEliminar(ActionEvent arg0) {
+		
+		ObjC.EliminarEmpleado(txtCodigo.getText());
+		JOptionPane.showMessageDialog(null,"***EMPLEADO RETIRADO***");
+		LimpiarCajas();
+		CargarJTable();
+		//Inicializar();
 		
 	}
 }
