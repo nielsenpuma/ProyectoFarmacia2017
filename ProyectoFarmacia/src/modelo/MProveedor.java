@@ -36,7 +36,7 @@ public class MProveedor {
 						Rs.getString("COD_PRV"),
 						Rs.getString("RAZ_SOC_PRV"),
 						Rs.getString("DIR_PRV"),
-						Rs.getString("TLF")
+						Rs.getString("TLF_PRV")
 						);
 				Lista.add(ObjP);
 			}
@@ -44,6 +44,70 @@ public class MProveedor {
 			System.out.println("Error al listar Proveedor.\n"+e.getMessage());
 		}
 		return Lista;
+	}
+	
+	//Actualizar Proveedor
+	public void ModificarProveedor(EProveedor obj){
+		String SQL = "CALL ModificarProveedor(?,?,?,?)";
+		try {
+			Stm = cn.prepareCall(SQL);
+			Stm.setString(1, obj.getCod_prv());
+			Stm.setString(2, obj.getRaz_soc_prv());
+			Stm.setString(3, obj.getDir_prv());
+			Stm.setString(4, obj.getTlf());
+			Stm.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("Error al actualizar Prov.\n"+e.getMessage());
+		}
+	}
+	//Eliminar Proveedor
+	public void EliminarProveedor(String id){
+		String SQL= "CALL EliminarProveedor(?)";
+		try {
+			Stm = cn.prepareCall(SQL);
+			Stm.setString(1, id);
+			Stm.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("Error al eliminar Prov.\n"+e.getMessage());
+		}
+	}
+	//Buscar Proveedor
+	public EProveedor BuscarProveedor(String id){
+		EProveedor objP = null;
+		String SQL = "CALL BuscarProveedor(?)";
+		try {
+			Stm = cn.prepareCall(SQL);
+			Stm.setString(1, id);
+			Rs = Stm.executeQuery();
+			
+			if (Rs.next()) {
+				objP = new EProveedor(
+						Rs.getString("COD_PRV"),
+						Rs.getString("RAZ_SOC_PRV"),
+						Rs.getString("DIR_PRV"),
+						Rs.getString("TLF_PRV")
+						);
+			}
+		} catch (Exception e) {
+			System.out.println("Error al buscar Prov.\n"+e.getMessage());
+		}
+		return objP;
+	}
+	
+	//Insertar Proveedor
+	public void InsertarProveedor(EProveedor obj){
+		String SQL = "CALL InsertarProveedor(?,?,?,?)";
+		try {
+			Stm = cn.prepareCall(SQL);
+			Stm.setString(1, obj.getCod_prv());
+			Stm.setString(2, obj.getRaz_soc_prv());
+			Stm.setString(3, obj.getDir_prv());
+			Stm.setString(4, obj.getTlf());
+			
+			Stm.executeQuery();
+		} catch (Exception e) {
+			System.out.println("Error al ingresar Prov.\n"+e.getMessage());
+		}
 	}
 	
 	//Método para cerrar la conexión al Base de Datos
