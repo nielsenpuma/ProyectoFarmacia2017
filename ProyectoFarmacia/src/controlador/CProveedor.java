@@ -24,6 +24,11 @@ public class CProveedor {
 		return ObjM.BuscarProveedor(id);
 	}
 	
+	//Método FIltrar
+	public ArrayList<EProveedor> Filtrar(String cad){
+		return ObjM.FiltrarProveedor(cad);
+	}
+	
 	//Método Insertar
 	public void Insertar(EProveedor obj){
 		ObjM.InsertarProveedor(obj);

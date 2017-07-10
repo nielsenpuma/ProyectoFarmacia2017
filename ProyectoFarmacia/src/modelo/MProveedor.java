@@ -93,6 +93,29 @@ public class MProveedor {
 		}
 		return objP;
 	}
+	//Filtrar 
+	public ArrayList<EProveedor> FiltrarProveedor(String cad){
+		Lista = new ArrayList<>();
+		String SQL = "call BuscarProveedor(?)";
+		try {
+			Stm = cn.prepareCall(SQL);
+			Stm.setString(1, cad);
+			Rs = Stm.executeQuery();
+			
+			while(Rs.next()){
+				EProveedor ObjP = new EProveedor(
+						Rs.getString("COD_PRV"),
+						Rs.getString("RAZ_SOC_PRV"),
+						Rs.getString("DIR_PRV"),
+						Rs.getString("TLF_PRV")
+						);
+				Lista.add(ObjP);
+			}
+		} catch (Exception e) {
+			System.out.println("Error al listar Proveedor.\n"+e.getMessage());
+		}
+		return Lista;
+	}
 	
 	//Insertar Proveedor
 	public void InsertarProveedor(EProveedor obj){
