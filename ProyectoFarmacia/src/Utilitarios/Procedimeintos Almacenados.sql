@@ -130,6 +130,14 @@ delimiter;
 
 -- *************************************************
 -- TABLA PRODUCTO
+-- Listar descripcion de productos
+drop procedure if exists ListarDescPro;
+delimiter @@
+create procedure ListarDescPro()
+begin
+	select p.DESC_PRO from tb_producto p;
+end @@
+delimiter;
 -- Listar
 drop procedure if exists ListarProducto;
 delimiter @@
@@ -146,7 +154,9 @@ drop procedure if exists BuscarProducto;
 delimiter @@
 create procedure BuscarProducto(xdes varchar(50))
 begin
-	select * from tb_producto where DESC_PRO=xdes;
+	select p.COD_PRO,p.DESC_PRO,p.PRE_PRO,p.STK_ACT,p.STK_MIN,p.UNI_MED,p.FEC_VENC,p.COD_LAB,p.COD_CAT
+    from tb_producto p 
+    where p.DESC_PRO=xdes;
 end @@
 delimiter;
 -- Insertar
@@ -164,7 +174,7 @@ delimiter @@
 create procedure ModificarProducto(xcod char(5),xdesc varchar(70), precio decimal (10,2),
 stokAct int, stokMin int, uniMed varchar(20), fecha date, codLab int,codCat int)
 begin
-	update tb_producto set DESC_PRO=xdescr,PRE_PRO=precio,STK_ACT=stokAct,STK_MIN=stokMin,
+	update tb_producto set DESC_PRO=xdesc,PRE_PRO=precio,STK_ACT=stokAct,STK_MIN=stokMin,
     UNI_MED=uniMed,FEC_VENC=fecha,COD_LAB=codLab,COD_CAT=codCat
     where COD_PRO=xcod;
 end @@
