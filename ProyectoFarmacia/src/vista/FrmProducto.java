@@ -15,14 +15,18 @@ import java.util.ArrayList;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import com.mysql.jdbc.util.ResultSetUtil;
 
 import controlador.CProducto;
 import entidades.ECategoria;
 import entidades.ELaboratorio;
 import entidades.EProducto;
+import entidades.EProveedor;
 
 import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -38,6 +42,7 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 	private CProducto objP = new CProducto();
 	private ArrayList<EProducto> MiLista;
 	private DefaultTableModel MiTabla;
+	private DefaultComboBoxModel<EProducto> MiCombo;
 
 	private JPanel contentPane;
 	public JPanel panel;
@@ -96,6 +101,16 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 		}
 		tablaProductos.setModel(MiTabla);
 	}
+	// Llenar JCombo con la lista
+		void llenarCombo() {
+			cboDescripcion.removeAllItems();
+			MiCombo = new DefaultComboBoxModel<>();
+			cboDescripcion.setModel(MiCombo);
+			MiLista = objP.Listar();
+			for (EProducto obj : MiLista) {
+				cboDescripcion.addItem(obj.getDesc_pro());
+			}
+		}
 	void limpiar(){
 		txtCodPro.setText("");
 		txtDescPro.setText("");
@@ -316,12 +331,14 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 				cboDescripcion.setEditable(true);
 				cboDescripcion.setBounds(20, 241, 307, 23);
 				contentPane.add(cboDescripcion);
+				AutoCompleteDecorator.decorate(this.cboDescripcion);
+				contentPane.add(cboDescripcion);
 			}
 			btnBuscar.addActionListener(this);
 		}
 		//cargar
-
 		CargarJTable();
+		llenarCombo();
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -413,6 +430,15 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 	protected void do_btnBuscar_actionPerformed(ActionEvent arg0) {
 		String des = cboDescripcion.getSelectedItem()+"";
 		objP.Buscar(des);
+		txtCodPro.setText(objP.Buscar(des).getCod_pro());
+		txtDescPro.setText(objP.Buscar(des).getDesc_pro());
+		txtPrecioPro.setText(objP.Buscar(des).getPre_pro()+"");
+		txtStokAct.setText(objP.Buscar(des).getStk_act()+"");
+		txtStkMin.setText(objP.Buscar(des).getStk_min()+"");
+		txtUnidMed.setText(objP.Buscar(des).getUnid_med());
+		txtFecVen.setText(objP.Buscar(des).getFec_ven());
+		txtCodLab.setText(objP.Buscar(des).getCod_lab().getCod_lab()+"");
+		txtCodCat.setText(objP.Buscar(des).getCod_cat().getCod_cat()+"");
 		
 	}
 	protected void do_btnSalir_actionPerformed(ActionEvent arg0) {
