@@ -19,11 +19,12 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.mysql.jdbc.util.ResultSetUtil;
 
+import controlador.CCategoria;
+import controlador.CLaboratorio;
 import controlador.CProducto;
 import entidades.ECategoria;
 import entidades.ELaboratorio;
 import entidades.EProducto;
-import entidades.EProveedor;
 
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
@@ -41,8 +42,17 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 	//atributos
 	private CProducto objP = new CProducto();
 	private ArrayList<EProducto> MiLista;
+	//array de laboratorio
+	private ArrayList<ELaboratorio> MiListaLab;
+	private CLaboratorio objLab = new CLaboratorio();
+	//Array de Categoria
+	private  ArrayList<ECategoria> MiListaCat;
+	private CCategoria objCat = new CCategoria();
+	
 	private DefaultTableModel MiTabla;
 	private DefaultComboBoxModel<EProducto> MiCombo;
+	private DefaultComboBoxModel<ELaboratorio> cboLab;
+	private DefaultComboBoxModel<ECategoria> cboCat;
 
 	private JPanel contentPane;
 	public JPanel panel;
@@ -64,8 +74,6 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 	public JLabel lblCodigoLaboratorio;
 	public JLabel lblCodigoCategoria;
 	public JTextField txtFecVen;
-	public JTextField txtCodLab;
-	public JTextField txtCodCat;
 	public JPanel panel_2;
 	public JButton btnNuevo;
 	public JButton btnEditar;
@@ -77,6 +85,8 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 	public JTable tablaProductos;
 	public JScrollPane scrollPane;
 	private JComboBox cboDescripcion;
+	private JComboBox cboLaboratorio;
+	private JComboBox cboCategoria;
 	//Cargar JTable
 	public void CargarJTable(){
 		MiLista = new ArrayList<>();
@@ -111,6 +121,24 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 				cboDescripcion.addItem(obj.getDesc_pro());
 			}
 		}
+		void LlenarCBOLaboratorio(){
+			cboLaboratorio.removeAllItems();
+			cboLab = new DefaultComboBoxModel<>();
+			cboLaboratorio.setModel(cboLab);
+			MiListaLab=objLab.Listar();
+			for (ELaboratorio obj : MiListaLab){
+				cboLaboratorio.addItem(obj.getDesc_lab()+" "+obj.getCod_lab());
+			}
+		}
+		void LlenarCBOCategoria(){
+			cboCategoria.removeAllItems();
+			cboCat = new DefaultComboBoxModel<>();
+			cboCategoria.setModel(cboCat);
+			MiListaCat=objCat.Listar();
+			for(ECategoria obj : MiListaCat){
+				cboCategoria.addItem(obj.getDesc_cat()+" "+obj.getCod_cat());
+			}
+		}
 	void limpiar(){
 		txtCodPro.setText("");
 		txtDescPro.setText("");
@@ -119,8 +147,8 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 		txtStkMin.setText("");
 		txtUnidMed.setText("");
 		txtFecVen.setText("");
-		txtCodLab.setText("");
-		txtCodCat.setText("");
+		cboLaboratorio.removeItem("");
+		cboCategoria.removeItem("");
 	}
 	
 
@@ -256,16 +284,16 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 				txtFecVen.setColumns(10);
 			}
 			{
-				txtCodLab = new JTextField();
-				txtCodLab.setBounds(541, 43, 86, 20);
-				panel_1.add(txtCodLab);
-				txtCodLab.setColumns(10);
+				cboLaboratorio = new JComboBox();
+				cboLaboratorio.setEditable(true);
+				cboLaboratorio.setBounds(497, 43, 155, 20);
+				panel_1.add(cboLaboratorio);
 			}
 			{
-				txtCodCat = new JTextField();
-				txtCodCat.setBounds(541, 68, 86, 20);
-				panel_1.add(txtCodCat);
-				txtCodCat.setColumns(10);
+				cboCategoria = new JComboBox();
+				cboCategoria.setEditable(true);
+				cboCategoria.setBounds(497, 68, 155, 20);
+				panel_1.add(cboCategoria);
 			}
 		}
 		{
@@ -339,6 +367,8 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 		//cargar
 		CargarJTable();
 		llenarCombo();
+		LlenarCBOLaboratorio();
+		LlenarCBOCategoria();
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -378,17 +408,24 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 		txtStkMin.setText(MiLista.get(fila).getStk_min()+"");
 		txtUnidMed.setText(MiLista.get(fila).getUnid_med());
 		txtFecVen.setText(MiLista.get(fila).getFec_ven());
-		txtCodLab.setText(MiLista.get(fila).getCod_lab().getDesc_lab()+"");
-		txtCodCat.setText(MiLista.get(fila).getCod_cat().getDesc_cat()+"");
+		cboLaboratorio.setSelectedItem(MiLista.get(fila).getCod_lab().getDesc_lab()+"");
+		cboCategoria.setSelectedItem(MiLista.get(fila).getCod_cat().getDesc_cat()+"");
 	}
 	protected void do_btnNuevo_actionPerformed(ActionEvent arg0) {
 		limpiar();
 	}
 	protected void do_btnEditar_actionPerformed(ActionEvent arg0) {
+			//laboratorio
+			String codLab = cboLaboratorio.getSelectedItem()+"";
+			codLab = codLab.substring(codLab.indexOf(" ",2));
+			//categoria
+			String codCat = cboCategoria.getSelectedItem()+"";
+			codCat = codCat.substring(codCat.indexOf(" ",2));
+
 		ELaboratorio l = new ELaboratorio();
 		ECategoria c = new ECategoria();
-		l.setCod_lab(Integer.parseInt(txtCodLab.getText()));
-		c.setCod_cat(Integer.parseInt(txtCodCat.getText()));
+		l.setCod_lab(Integer.parseInt(codLab.trim()));
+		c.setCod_cat(Integer.parseInt(codCat.trim()));
 		EProducto obj = new EProducto(
 				txtCodPro.getText(),
 				txtDescPro.getText(),
@@ -404,10 +441,16 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 		CargarJTable();
 	}
 	protected void do_btnGuardar_actionPerformed(ActionEvent arg0) {
+		//laboratorio
+				String codLab = cboLaboratorio.getSelectedItem().toString();
+				codLab = codLab.substring(codLab.indexOf(" ",2));
+				//categoria
+				String codCat = cboCategoria.getSelectedItem().toString();
+				codCat = codCat.substring(codCat.indexOf(" ",2));
 		ELaboratorio lab = new ELaboratorio();
 		ECategoria cat = new ECategoria();
-		lab.setCod_lab(Integer.parseInt(txtCodLab.getText()));
-		cat.setCod_cat(Integer.parseInt(txtCodCat.getText()));
+		lab.setCod_lab(Integer.parseInt(codLab.trim()));
+		cat.setCod_cat(Integer.parseInt(codCat.trim()));
 		EProducto obj = new EProducto(
 				txtCodPro.getText(),
 				txtDescPro.getText(),
@@ -421,6 +464,7 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 				);
 		objP.Insertar(obj);
 		CargarJTable();
+		llenarCombo();
 	}
 	protected void do_btnEliminar_actionPerformed(ActionEvent arg0) {
 		String Id=txtCodPro.getText();
@@ -436,10 +480,7 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 		txtStokAct.setText(objP.Buscar(des).getStk_act()+"");
 		txtStkMin.setText(objP.Buscar(des).getStk_min()+"");
 		txtUnidMed.setText(objP.Buscar(des).getUnid_med());
-		txtFecVen.setText(objP.Buscar(des).getFec_ven());
-		txtCodLab.setText(objP.Buscar(des).getCod_lab().getCod_lab()+"");
-		txtCodCat.setText(objP.Buscar(des).getCod_cat().getCod_cat()+"");
-		
+		txtFecVen.setText(objP.Buscar(des).getFec_ven());		
 	}
 	protected void do_btnSalir_actionPerformed(ActionEvent arg0) {
 		dispose();
