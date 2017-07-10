@@ -11,6 +11,9 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.rollover.TableRolloverProducer;
+
 import controlador.CProveedor;
 import entidades.EProveedor;
 
@@ -20,15 +23,21 @@ import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
-public class FrmProveedor extends JFrame {
+public class FrmProveedor extends JFrame implements MouseListener {
 
-	//Campos o Atributos
+	// Campos o Atributos
 	private CProveedor ObjC = new CProveedor();
 	private ArrayList<EProveedor> MiLista;
-	
+
 	private DefaultTableModel MiTabla;
-	
+
+	private DefaultComboBoxModel<EProveedor> comboPrv;
+
 	private JPanel contentPane;
 	private JLabel lblProveedor;
 	private JLabel lblCodProv;
@@ -36,9 +45,8 @@ public class FrmProveedor extends JFrame {
 	private JLabel lblApPaterno;
 	private JLabel lblApMaterno;
 	private JTextField txtCodPrv;
-	private JTextField txtRazSocial;
-	private JTextField txtApPaterno;
-	private JTextField txtApMaterno;
+	private JTextField txtDireccion;
+	private JTextField txtTelefono;
 	private JPanel panel;
 	private JButton btnNuevo;
 	private JButton btnEditar;
@@ -47,32 +55,10 @@ public class FrmProveedor extends JFrame {
 	private JButton btnCancelar;
 	private JButton btnSalir;
 	private JPanel panel_1;
+	private JComboBox cmbPrv;
 	private JTable tablaProveedor;
 	private JScrollPane scrollPane;
 
-	//Cargar JTable
-	public void CargarJTable(){
-		MiTabla = new DefaultTableModel();
-		String columnas[]={"Cod.", "Raz. Social", "Dirección", "Teléfono"};
-		
-		for (String obj : columnas) {
-			MiTabla.addColumn(obj);
-		}
-		
-		Object filas[][] = new Object[MiLista.size()][4];
-		
-		for (int i = 0; i < MiLista.size(); i++) {
-			filas[i][0] = MiLista.get(i).getCod_prv();
-			filas[i][1] = MiLista.get(i).getRaz_soc_prv();
-			filas[i][2] = MiLista.get(i).getDir_prv();
-			filas[i][3] = MiLista.get(i).getTlf();
-			
-			MiTabla.addRow(filas[i]);
-		}
-		
-		tablaProveedor.setModel(MiTabla);
-	}
-	
 	/**
 	 * Launch the application.
 	 */
@@ -87,6 +73,42 @@ public class FrmProveedor extends JFrame {
 				}
 			}
 		});
+	}
+
+	// Cargar JTable
+	public void CargarJTable() {
+		MiTabla = new DefaultTableModel();
+		String columnas[] = { "Cod.", "Raz. Social", "Dirección", "Teléfono" };
+
+		for (String obj : columnas) {
+			MiTabla.addColumn(obj);
+		}
+
+		Object filas[][] = new Object[MiLista.size()][4];
+
+		for (int i = 0; i < MiLista.size(); i++) {
+			filas[i][0] = MiLista.get(i).getCod_prv();
+			filas[i][1] = MiLista.get(i).getRaz_soc_prv();
+			filas[i][2] = MiLista.get(i).getDir_prv();
+			filas[i][3] = MiLista.get(i).getTlf();
+
+			MiTabla.addRow(filas[i]);
+		}
+		tablaProveedor.setModel(MiTabla);
+	}
+
+	// Llenar JCombo con la lista
+	void llenarCombo() {
+		cmbPrv.removeAllItems();
+		comboPrv = new DefaultComboBoxModel<>();
+
+		cmbPrv.setModel(comboPrv);
+
+		MiLista = ObjC.Listar();
+
+		for (EProveedor eProveedor : MiLista) {
+			comboPrv.addElement(eProveedor);
+		}
 	}
 
 	/**
@@ -132,22 +154,16 @@ public class FrmProveedor extends JFrame {
 			txtCodPrv.setColumns(10);
 		}
 		{
-			txtRazSocial = new JTextField();
-			txtRazSocial.setBounds(95, 67, 210, 20);
-			contentPane.add(txtRazSocial);
-			txtRazSocial.setColumns(10);
+			txtDireccion = new JTextField();
+			txtDireccion.setBounds(95, 92, 173, 20);
+			contentPane.add(txtDireccion);
+			txtDireccion.setColumns(10);
 		}
 		{
-			txtApPaterno = new JTextField();
-			txtApPaterno.setBounds(95, 92, 173, 20);
-			contentPane.add(txtApPaterno);
-			txtApPaterno.setColumns(10);
-		}
-		{
-			txtApMaterno = new JTextField();
-			txtApMaterno.setBounds(95, 117, 173, 20);
-			contentPane.add(txtApMaterno);
-			txtApMaterno.setColumns(10);
+			txtTelefono = new JTextField();
+			txtTelefono.setBounds(95, 117, 173, 20);
+			contentPane.add(txtTelefono);
+			txtTelefono.setColumns(10);
 		}
 		{
 			panel = new JPanel();
@@ -188,24 +204,61 @@ public class FrmProveedor extends JFrame {
 		}
 		{
 			panel_1 = new JPanel();
-			panel_1.setBorder(new TitledBorder(null, "Lista Proveedores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel_1.setBorder(
+					new TitledBorder(null, "Lista Proveedores", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panel_1.setBounds(10, 266, 528, 168);
 			contentPane.add(panel_1);
 			panel_1.setLayout(null);
 			{
 				scrollPane = new JScrollPane();
-				scrollPane.setBounds(10, 25, 508, 132);
+				scrollPane.setBounds(18, 28, 484, 122);
 				panel_1.add(scrollPane);
 				{
 					tablaProveedor = new JTable();
+					tablaProveedor.addMouseListener(this);
 					scrollPane.setViewportView(tablaProveedor);
 				}
 			}
 		}
-		
-		//cargando al inicio los datos en la tabla
+		{
+			cmbPrv = new JComboBox();
+			cmbPrv.setModel(
+					new DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" }));
+			cmbPrv.setBounds(95, 62, 210, 27);
+			AutoCompleteDecorator.decorate(this.cmbPrv);
+			contentPane.add(cmbPrv);
+		}
+
+		// cargando al inicio los datos en la tabla
 		MiLista = new ArrayList<>();
 		MiLista = ObjC.Listar();
 		CargarJTable();
+
+		llenarCombo();
+	}
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() == tablaProveedor) {
+			mouseClickedTablaProveedor(e);
+		}
+	}
+	public void mouseEntered(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) {
+	}
+	public void mousePressed(MouseEvent e) {
+	}
+	public void mouseReleased(MouseEvent e) {
+	}
+	protected void mouseClickedTablaProveedor(MouseEvent e) {
+		int filaSelect = tablaProveedor.getSelectedRow();
+		
+		if(filaSelect != -1){
+			txtCodPrv.setText(tablaProveedor.getValueAt(filaSelect, 0).toString());
+			//txtRazSocial.setText(tablaProveedor.getValueAt(filaSelect, 1).toString());
+			txtDireccion.setText(tablaProveedor.getValueAt(filaSelect, 2).toString());
+			txtTelefono.setText(tablaProveedor.getValueAt(filaSelect, 3).toString());
+			
+			cmbPrv.setSelectedItem(tablaProveedor.getValueAt(filaSelect, 1));
+		}
 	}
 }

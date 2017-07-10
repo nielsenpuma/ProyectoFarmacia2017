@@ -41,4 +41,9 @@ public class EProveedor {
 		this.tlf = tlf;
 	}
 	
+	//Sobrescribiendo toString para que muestre resultados
+	public String toString(){
+		return this.raz_soc_prv;
+	}
+	
 }
