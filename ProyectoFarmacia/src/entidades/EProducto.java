@@ -13,7 +13,8 @@ public class EProducto {
 	private ECategoria cod_cat;
 	//constructor
 	
-	public EProducto(){}
+	public EProducto(){
+	}
 	
 	public EProducto(String cod_pro, String desc_pro, double pre_pro, int stk_act, int stk_min, String unid_med,
 			String fec_ven, ELaboratorio cod_lab, ECategoria cod_cat) {

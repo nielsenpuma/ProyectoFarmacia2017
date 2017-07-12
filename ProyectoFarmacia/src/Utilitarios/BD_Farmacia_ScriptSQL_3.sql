@@ -28,6 +28,18 @@ CREATE TABLE IF NOT EXISTS `bd_Farmacia`.`TB_PROVEEDOR` (
   PRIMARY KEY (`COD_PRV`))
 ENGINE = InnoDB;
 
+INSERT INTO tb_proveedor VALUES('PR001','Abbot ','Av. Isabel La Catolica 1875','4330895');
+INSERT INTO tb_proveedor VALUES('PR002','Farmaval Peru s.a','Av. Lima 471','5380926');
+INSERT INTO tb_proveedor VALUES('PR003','Tecnofarma s.a','Av. Venezuela 3018'    ,'2908165');
+INSERT INTO tb_proveedor VALUES('PR004','Almafar s.a.c ','Av. Metropolitana 376'   ,'6542223');
+INSERT INTO tb_proveedor VALUES('PR005','Bmc Farma ','Calle Las Dunas 245 '   ,'4780143');
+INSERT INTO tb_proveedor VALUES('PR006','Sebal Farmacia s.a.c','Calle Pichincha 644 '   ,'5662848');
+INSERT INTO tb_proveedor VALUES('PR007','Richer company ','Calle Las Perdices 225 Of. 204'  ,'4216184');
+INSERT INTO tb_proveedor VALUES('PR008','Nexus Pharmaceutical ','Av. Los Frutales 564 '   ,'4364247');
+INSERT INTO tb_proveedor VALUES('PR009','Dipropor s.a','Av. Del Aire 901'    ,'4742046');
+INSERT INTO tb_proveedor VALUES('PR010','Miura s.a','Av. La Paz 257'    ,'4459710');
+
+select * from tb_proveedor;
 
 -- -----------------------------------------------------
 -- Table `bd_Farmacia`.`TB_CLIENTE`
@@ -42,6 +54,16 @@ CREATE TABLE IF NOT EXISTS `bd_Farmacia`.`TB_CLIENTE` (
   PRIMARY KEY (`COD_CLI`))
 ENGINE = InnoDB;
 
+INSERT INTO tb_cliente VALUES('C0001','Alicia','beltran','suarez','2008/10/12','934231843');
+INSERT INTO tb_cliente VALUES('C0002','Emilio','pino','Beltran','2013/01/12','984406335');
+INSERT INTO tb_cliente VALUES('C0003','Estrella','Laguna','Sol','2011/03/06','975012403');
+INSERT INTO tb_cliente VALUES('C0004','Luis','morales','duares','2012/12/09','973725910');
+INSERT INTO tb_cliente VALUES('C0005','Katia','ruiz','vasques','2013/01/10','994446177');
+INSERT INTO tb_cliente VALUES('C0006','Judith','paredes','armando','2013/05/07','913810322');
+INSERT INTO tb_cliente VALUES('C0007','Hector','chafloque','tirado','2012/02/10','925289034');
+INSERT INTO tb_cliente VALUES('C0008','Intech','huaman','garcia','2011/07/01','922249493');
+
+select * from tb_cliente;
 
 -- -----------------------------------------------------
 -- Table `bd_Farmacia`.`TB_CARGO`
@@ -52,7 +74,11 @@ CREATE TABLE IF NOT EXISTS `bd_Farmacia`.`TB_CARGO` (
   PRIMARY KEY (`COD_CARGO`))
 ENGINE = InnoDB;
 
-
+insert into tb_cargo values(1,'cajero'),
+							(2,'vendedor'),
+                            (3,'administrador'),
+                            (4,'almacenero');
+select * from tb_cargo;
 -- -----------------------------------------------------
 -- Table `bd_Farmacia`.`TB_EMPLEADO`
 -- -----------------------------------------------------
@@ -75,6 +101,18 @@ CREATE TABLE IF NOT EXISTS `bd_Farmacia`.`TB_EMPLEADO` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+INSERT INTO tb_empleado VALUES('E0001','JUANA','ALVA','SUASO','2003/07/02','2016/07/02','D08','123',1);
+INSERT INTO tb_empleado VALUES('E0002','JUAN','SOTO','SOTO','2002/03/10','2015/07/02','D03','123',1);
+INSERT INTO tb_empleado VALUES('E0003','CARLOS','AREVALO','ALVARADO','1992/10/02/','2006/07/02','D09','123',2);
+INSERT INTO tb_empleado VALUES('E0004','CESAR','OJEDA','RUIZ','1999/11/08','2012/07/02','D01','123',2);
+INSERT INTO tb_empleado VALUES('E0005','JULIO','VEGA','DENI','1997/05/11','2016/07/02','D02','123',3);
+INSERT INTO tb_empleado VALUES('E0006','ANA','ORTEGA','CHUMPITAZ','1994/05/11','2017/07/02','D05','123',3);
+INSERT INTO tb_empleado VALUES('E0007','JOSE','PALACIOS','CHORRI','1997/02/12','2013/07/02','D06','123',4);
+INSERT INTO tb_empleado VALUES('E0008','RUBEN','GOMEZ','MULLER','1996/08/12','2013/07/02','D04','123',4);
+INSERT INTO tb_empleado VALUES('E0009','PATRICIA','ARCE','BENIT','1997/05/12','2013/07/02','D07','123',3);
+INSERT INTO tb_empleado VALUES('E0010','RENATO','PEREZ','LLANTO','1998/08/11','2013/07/02','D08','123');
+
+select * from tb_empleado;
 
 -- -----------------------------------------------------
 -- Table `bd_Farmacia`.`TB_LABORATORIO`
@@ -86,16 +124,40 @@ CREATE TABLE IF NOT EXISTS `bd_Farmacia`.`TB_LABORATORIO` (
 ENGINE = InnoDB;
 
 
+INSERT INTO   tb_laboratorio VALUES(1,'Bayer');
+INSERT INTO   tb_laboratorio VALUES(2,'Baxter');
+INSERT INTO   tb_laboratorio VALUES(3,'Esel');
+INSERT INTO   tb_laboratorio VALUES(4,'Lilly');
+INSERT INTO   tb_laboratorio VALUES(5,'IqFarma');
+INSERT INTO   tb_laboratorio VALUES(6,'TecnoFarma');
+INSERT INTO   tb_laboratorio VALUES(7,'Nexus');
+
+select * from tb_laboratorio;
+
 -- -----------------------------------------------------
 -- Table `bd_Farmacia`.`TB_CATEGORIA`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bd_Farmacia`.`TB_CATEGORIA` (
-  `COD_CAT` INT NOT NULL AUTO_INCREMENT,
+  `COD_CAT` INT NULL,
   `DESC_CAT` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`COD_CAT`))
 ENGINE = InnoDB;
 
 
+insert into tb_categoria values (01,'Analgesicos');
+insert into tb_categoria values (02,'Antinflamatorios');
+insert into tb_categoria values (03,'Aines');
+insert into tb_categoria values (04,'Antibioticos');
+insert into tb_categoria values (05,'Amoxicilna');
+insert into tb_categoria values (06,'Cefalosporinas');
+insert into tb_categoria values (07,'Eritromicina');
+insert into tb_categoria values (08,'Quinolona');
+insert into tb_categoria values (09,'Ampicilina');
+insert into tb_categoria values (10,'Vancomicina');
+insert into tb_categoria values (11,'Azitromicina');
+insert into tb_categoria values (12,'Penicilinas');
+
+select * from tb_categoria;
 -- -----------------------------------------------------
 -- Table `bd_Farmacia`.`TB_PRODUCTO`
 -- -----------------------------------------------------
@@ -123,6 +185,31 @@ CREATE TABLE IF NOT EXISTS `bd_Farmacia`.`TB_PRODUCTO` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
+
+INSERT INTO TB_PRODUCTO VALUES  ('P0001','ASGESIC 10MG',2,80,10,'MILIGRAMO','18/05/21',1,1),
+							    ('P0002','ASGESIC 20MG',3.5,95,10,'MILIGRAMO','18/05/21',2,2),
+								('P0003','ASGESIC 30MG',5,74,10,'MILIGRAMO','18/05/21',3,2),
+								('P0004','ASGESIC 60MG',8.5,65,10,'MILIGRAMO','18/05/21',4,3),
+								('P0005','DOLALGIAL',3,76,10,'MILIGRAMO','18/05/21',5,5),
+								('P0006','NACLODIL',5,43,10,'MILIGRAMO','18/05/21',6,3),
+								('P0007','DOLOSTOP 20MG',600,54,10,'MILIGRAMO','18/05/21',7,5),
+								('P0008','ASPIRINA',1,99,10,'MILIGRAMO','18/05/21',1,7),
+								('P0009','CAFIASPIRINA',1,65,10,'MILIGRAMO','18/05/21',2,4),
+								('P0010','DOLPIRET CMP',2,54,10,'MILIGRAMO','18/05/21',3,6),
+                                ('P0011','DOLPIRET SSP',3,64,10,'MILIGRAMO','18/05/21',4,6),
+								('P0012','DONTOFLAMON CMP',2.5,13,10,'MILIGRAMO','18/05/21',5,8),
+								('P0013','DONTOFLAMON SSP',3.5,65,10,'MILIGRAMO','18/05/21',6,9),
+								('P0014','IBUFLAMAR',6.5,75,10,'MILIGRAMO','18/05/21',7,9),
+								('P0015','PIREDOL',5,48,10,'MILIGRAMO','18/05/21',1,9),
+								('P0016','FLAMADIN',3,46,2,'MILIGRAMO','18/05/21',2,9),
+								('P0017','DIPROFEN CMP',6,84,10,'MILIGRAMO','18/05/21',3,6),
+								('P0018','DIPROFEN SSP',7.5,46,10,'MILIGRAMO','18/05/21',4,6),
+								('P0019','IBUPRONAL FORTE',10,64,10,'MILIGRAMO','18/05/21',5,3),
+								('P0020','CEFLEX 200MG',4.5,76,10,'MILIGRAMO','18/05/21',6,9);
+                                
+select * from tb_producto;
 
 
 -- -----------------------------------------------------

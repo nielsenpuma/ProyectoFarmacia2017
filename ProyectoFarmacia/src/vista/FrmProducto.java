@@ -15,23 +15,44 @@ import java.util.ArrayList;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import com.mysql.jdbc.util.ResultSetUtil;
+
+import controlador.CCategoria;
+import controlador.CLaboratorio;
 import controlador.CProducto;
 import entidades.ECategoria;
 import entidades.ELaboratorio;
 import entidades.EProducto;
 
 import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.awt.event.MouseEvent;
+import javax.swing.JComboBox;
 
-public class FrmProducto extends JFrame implements ActionListener {
+public class FrmProducto extends JFrame implements ActionListener, MouseListener {
 	//atributos
 	private CProducto objP = new CProducto();
 	private ArrayList<EProducto> MiLista;
+	//array de laboratorio
+	private ArrayList<ELaboratorio> MiListaLab;
+	private CLaboratorio objLab = new CLaboratorio();
+	//Array de Categoria
+	private  ArrayList<ECategoria> MiListaCat;
+	private CCategoria objCat = new CCategoria();
+	
 	private DefaultTableModel MiTabla;
+	private DefaultComboBoxModel<EProducto> MiCombo;
+	private DefaultComboBoxModel<ELaboratorio> cboLab;
+	private DefaultComboBoxModel<ECategoria> cboCat;
 
 	private JPanel contentPane;
 	public JPanel panel;
@@ -53,8 +74,6 @@ public class FrmProducto extends JFrame implements ActionListener {
 	public JLabel lblCodigoLaboratorio;
 	public JLabel lblCodigoCategoria;
 	public JTextField txtFecVen;
-	public JTextField txtCodLab;
-	public JTextField txtCodCat;
 	public JPanel panel_2;
 	public JButton btnNuevo;
 	public JButton btnEditar;
@@ -65,8 +84,13 @@ public class FrmProducto extends JFrame implements ActionListener {
 	public JPanel panel_3;
 	public JTable tablaProductos;
 	public JScrollPane scrollPane;
+	private JComboBox cboDescripcion;
+	private JComboBox cboLaboratorio;
+	private JComboBox cboCategoria;
 	//Cargar JTable
 	public void CargarJTable(){
+		MiLista = new ArrayList<>();
+		MiLista = objP.Listar();
 		MiTabla = new DefaultTableModel();
 		String columnas[]={"Codigo", "Descripcion","Precio","Stock Act","Stock Min","Unidad Med","Fecha Ven","Cod. Lab","Cod.Cat"};
 		for (String obj : columnas) {
@@ -87,6 +111,34 @@ public class FrmProducto extends JFrame implements ActionListener {
 		}
 		tablaProductos.setModel(MiTabla);
 	}
+	// Llenar JCombo con la lista
+		void llenarCombo() {
+			cboDescripcion.removeAllItems();
+			MiCombo = new DefaultComboBoxModel<>();
+			cboDescripcion.setModel(MiCombo);
+			MiLista = objP.Listar();
+			for (EProducto obj : MiLista) {
+				cboDescripcion.addItem(obj.getDesc_pro());
+			}
+		}
+		void LlenarCBOLaboratorio(){
+			cboLaboratorio.removeAllItems();
+			cboLab = new DefaultComboBoxModel<>();
+			cboLaboratorio.setModel(cboLab);
+			MiListaLab=objLab.Listar();
+			for (ELaboratorio obj : MiListaLab){
+				cboLaboratorio.addItem(obj.getDesc_lab()+" "+obj.getCod_lab());
+			}
+		}
+		void LlenarCBOCategoria(){
+			cboCategoria.removeAllItems();
+			cboCat = new DefaultComboBoxModel<>();
+			cboCategoria.setModel(cboCat);
+			MiListaCat=objCat.Listar();
+			for(ECategoria obj : MiListaCat){
+				cboCategoria.addItem(obj.getDesc_cat()+" "+obj.getCod_cat());
+			}
+		}
 	void limpiar(){
 		txtCodPro.setText("");
 		txtDescPro.setText("");
@@ -95,8 +147,8 @@ public class FrmProducto extends JFrame implements ActionListener {
 		txtStkMin.setText("");
 		txtUnidMed.setText("");
 		txtFecVen.setText("");
-		txtCodLab.setText("");
-		txtCodCat.setText("");
+		cboLaboratorio.removeItem("");
+		cboCategoria.removeItem("");
 	}
 	
 
@@ -141,7 +193,7 @@ public class FrmProducto extends JFrame implements ActionListener {
 		{
 			panel_1 = new JPanel();
 			panel_1.setBorder(new TitledBorder(null, "Datos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel_1.setBounds(10, 58, 662, 206);
+			panel_1.setBounds(10, 58, 662, 175);
 			contentPane.add(panel_1);
 			panel_1.setLayout(null);
 			{
@@ -232,22 +284,22 @@ public class FrmProducto extends JFrame implements ActionListener {
 				txtFecVen.setColumns(10);
 			}
 			{
-				txtCodLab = new JTextField();
-				txtCodLab.setBounds(541, 43, 86, 20);
-				panel_1.add(txtCodLab);
-				txtCodLab.setColumns(10);
+				cboLaboratorio = new JComboBox();
+				cboLaboratorio.setEditable(true);
+				cboLaboratorio.setBounds(497, 43, 155, 20);
+				panel_1.add(cboLaboratorio);
 			}
 			{
-				txtCodCat = new JTextField();
-				txtCodCat.setBounds(541, 68, 86, 20);
-				panel_1.add(txtCodCat);
-				txtCodCat.setColumns(10);
+				cboCategoria = new JComboBox();
+				cboCategoria.setEditable(true);
+				cboCategoria.setBounds(497, 68, 155, 20);
+				panel_1.add(cboCategoria);
 			}
 		}
 		{
 			panel_2 = new JPanel();
 			panel_2.setBorder(new TitledBorder(null, "Mantenimiento", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel_2.setBounds(682, 58, 122, 206);
+			panel_2.setBounds(682, 58, 122, 175);
 			contentPane.add(panel_2);
 			panel_2.setLayout(null);
 			{
@@ -275,15 +327,9 @@ public class FrmProducto extends JFrame implements ActionListener {
 				panel_2.add(btnEliminar);
 			}
 			{
-				btnBuscar = new JButton("Buscar");
-				btnBuscar.addActionListener(this);
-				btnBuscar.setBounds(10, 141, 89, 23);
-				panel_2.add(btnBuscar);
-			}
-			{
 				btnSalir = new JButton("Salir");
 				btnSalir.addActionListener(this);
-				btnSalir.setBounds(10, 172, 89, 23);
+				btnSalir.setBounds(10, 145, 89, 23);
 				panel_2.add(btnSalir);
 			}
 		}
@@ -299,12 +345,30 @@ public class FrmProducto extends JFrame implements ActionListener {
 				panel_3.add(scrollPane);
 				{
 					tablaProductos = new JTable();
+					tablaProductos.addMouseListener(this);
 					scrollPane.setViewportView(tablaProductos);
 				}
 			}
 		}
+		{
+			btnBuscar = new JButton("Buscar");
+			btnBuscar.setBounds(337, 241, 89, 23);
+			contentPane.add(btnBuscar);
+			{
+				cboDescripcion = new JComboBox();
+				cboDescripcion.setEditable(true);
+				cboDescripcion.setBounds(20, 241, 307, 23);
+				contentPane.add(cboDescripcion);
+				AutoCompleteDecorator.decorate(this.cboDescripcion);
+				contentPane.add(cboDescripcion);
+			}
+			btnBuscar.addActionListener(this);
+		}
 		//cargar
-		
+		CargarJTable();
+		llenarCombo();
+		LlenarCBOLaboratorio();
+		LlenarCBOCategoria();
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -327,14 +391,42 @@ public class FrmProducto extends JFrame implements ActionListener {
 			do_btnNuevo_actionPerformed(arg0);
 		}
 	}
+	public void mouseEntered(MouseEvent arg0) {
+	}
+	public void mouseExited(MouseEvent arg0) {
+	}
+	public void mousePressed(MouseEvent arg0) {
+	}
+	public void mouseReleased(MouseEvent arg0) {
+	}
+	protected void do_tablaProductos_mouseClicked(MouseEvent arg0) {
+		int fila = tablaProductos.getSelectedRow();
+		txtCodPro.setText(MiLista.get(fila).getCod_pro());
+		txtDescPro.setText(MiLista.get(fila).getDesc_pro());
+		txtPrecioPro.setText(MiLista.get(fila).getPre_pro()+"");
+		txtStokAct.setText(MiLista.get(fila).getStk_act()+"");
+		txtStkMin.setText(MiLista.get(fila).getStk_min()+"");
+		txtUnidMed.setText(MiLista.get(fila).getUnid_med());
+		txtFecVen.setText(MiLista.get(fila).getFec_ven());
+		cboLaboratorio.setSelectedItem(MiLista.get(fila).getCod_lab().getDesc_lab()+"");
+		cboCategoria.setSelectedItem(MiLista.get(fila).getCod_cat().getDesc_cat()+"");
+	}
 	protected void do_btnNuevo_actionPerformed(ActionEvent arg0) {
 		limpiar();
 	}
 	protected void do_btnEditar_actionPerformed(ActionEvent arg0) {
+			//laboratorio
+			String codLab = cboLaboratorio.getSelectedItem()+"";
+			codLab = codLab.substring(codLab.indexOf(" ",2));
+			//categoria
+			String codCat = cboCategoria.getSelectedItem()+"";
+			codCat = codCat.substring(codCat.indexOf(" ",2));
+
 		ELaboratorio l = new ELaboratorio();
-		int cod = Integer.parseInt(txtCodLab.getText());
 		ECategoria c = new ECategoria();
-	/*	EProducto obj = new EProducto(
+		l.setCod_lab(Integer.parseInt(codLab.trim()));
+		c.setCod_cat(Integer.parseInt(codCat.trim()));
+		EProducto obj = new EProducto(
 				txtCodPro.getText(),
 				txtDescPro.getText(),
 				Double.parseDouble(txtPrecioPro.getText()),
@@ -342,26 +434,63 @@ public class FrmProducto extends JFrame implements ActionListener {
 				Integer.parseInt(txtStkMin.getText()),
 				txtUnidMed.getText(),
 				txtFecVen.getText(),
-				txtCodLab.getText(),
-				txtCodCat.getText()
+				l,
+				c
 				);
-		objP.Modificar(obj);*/
+		objP.Modificar(obj);
+		CargarJTable();
 	}
 	protected void do_btnGuardar_actionPerformed(ActionEvent arg0) {
+		//laboratorio
+				String codLab = cboLaboratorio.getSelectedItem().toString();
+				codLab = codLab.substring(codLab.indexOf(" ",2));
+				//categoria
+				String codCat = cboCategoria.getSelectedItem().toString();
+				codCat = codCat.substring(codCat.indexOf(" ",2));
+		ELaboratorio lab = new ELaboratorio();
+		ECategoria cat = new ECategoria();
+		lab.setCod_lab(Integer.parseInt(codLab.trim()));
+		cat.setCod_cat(Integer.parseInt(codCat.trim()));
+		EProducto obj = new EProducto(
+				txtCodPro.getText(),
+				txtDescPro.getText(),
+				Double.parseDouble(txtPrecioPro.getText()),
+				Integer.parseInt(txtStokAct.getText()),
+				Integer.parseInt(txtStkMin.getText()),
+				txtUnidMed.getText(),
+				txtFecVen.getText(),
+				lab,
+				cat
+				);
+		objP.Insertar(obj);
+		CargarJTable();
+		llenarCombo();
 	}
 	protected void do_btnEliminar_actionPerformed(ActionEvent arg0) {
+		String Id=txtCodPro.getText();
+		objP.Eliminar(Id);
+		CargarJTable();
 	}
 	protected void do_btnBuscar_actionPerformed(ActionEvent arg0) {
-		String des = txtDescPro.getText();
+		String des = cboDescripcion.getSelectedItem()+"";
 		objP.Buscar(des);
-		MiLista=objP.Buscar(des);
-		CargarJTable();
-		
+		txtCodPro.setText(objP.Buscar(des).getCod_pro());
+		txtDescPro.setText(objP.Buscar(des).getDesc_pro());
+		txtPrecioPro.setText(objP.Buscar(des).getPre_pro()+"");
+		txtStokAct.setText(objP.Buscar(des).getStk_act()+"");
+		txtStkMin.setText(objP.Buscar(des).getStk_min()+"");
+		txtUnidMed.setText(objP.Buscar(des).getUnid_med());
+		txtFecVen.setText(objP.Buscar(des).getFec_ven());		
 	}
 	protected void do_btnSalir_actionPerformed(ActionEvent arg0) {
 		dispose();
 	}
 	void mensaje(String s){
 		JOptionPane.showMessageDialog(this, s);
+	}
+	public void mouseClicked(MouseEvent arg0) {
+		if (arg0.getSource() == tablaProductos) {
+			do_tablaProductos_mouseClicked(arg0);
+		}
 	}
 }

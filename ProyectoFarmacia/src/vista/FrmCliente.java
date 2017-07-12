@@ -14,7 +14,6 @@ import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.DateFormat;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -28,13 +27,16 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.SystemColor;
 import java.util.ArrayList;
+import java.text.DateFormat;
 import com.toedter.calendar.JDateChooser;
 import controlador.CCliente;
 import entidades.ECliente;
+import javax.swing.JProgressBar;
 
-public class FrmCliente extends JFrame {
+public class FrmCliente extends JFrame {	
 	// Campos o atributos
 	private CCliente ObjC = new CCliente();
+	private JDateChooser JDCFechaReg = new JDateChooser();
 	private ArrayList<ECliente> MiLista;
 	
 	private JPanel contentPane;
@@ -45,31 +47,29 @@ public class FrmCliente extends JFrame {
 	private JTextField txtTelfCliente;
 	private JTable tablaCliente;
 	private DefaultTableModel MiTabla;
-	JDateChooser JDCFechaReg = new JDateChooser();
 	
 	public void Inicializar(){
 		MiLista = new ArrayList<>();
 		MiLista = ObjC.Listar();
 	}
-	
+
 	public void LimpiarCajas(){
 		txtCodCliente.setText("");
 		txtNomCliente.setText("");
 		txtApPaternoCliente.setText("");
 		txtApMaternoCliente.setText("");
-		JDCFechaReg.setDateFormatString("");;
+		JDCFechaReg.setCalendar(null);
 		txtTelfCliente.setText("");
 		txtCodCliente.requestFocus();
-	}
-	
-		// Cargar el JTable
+	}	
+		// Método para cargar el JTable
 		public void CargarJTable(){
 			MiTabla = new DefaultTableModel();
 			// Cargar los nombres de Columnas
 			String Columnas[]={"Código", "Nombre", "Apellido Paterno", "Apellido Materno", "Fec. Registro", "Teléfono"};
 			for(String Obj:Columnas){
 				MiTabla.addColumn(Obj);
-			}
+			}			
 			// Cargar las filas
 			Object Filas[][] = new Object[MiLista.size()][6];
 			for (int i = 0; i < MiLista.size(); i++) {
@@ -79,12 +79,10 @@ public class FrmCliente extends JFrame {
 				Filas[i][3] = MiLista.get(i).getAmaT_cli();
 				Filas[i][4] = MiLista.get(i).getFec_reg_cli();
 				Filas[i][5] = MiLista.get(i).getTlf_cliente();
-				MiTabla.addRow(Filas[i]);
-				
-			}
+				MiTabla.addRow(Filas[i]);	
+			}			
 			// Cargar en el JTabla
 			tablaCliente.setModel(MiTabla);
-			
 		}
 
 	/**
@@ -110,18 +108,19 @@ public class FrmCliente extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				 int confirmed = JOptionPane.showConfirmDialog(null, 
-					        "¿Seguro que desea salir?", "Advertencia",
-					        JOptionPane.YES_NO_OPTION);
+				 int confirmed = JOptionPane.showConfirmDialog(null,
+						 "¿Seguro que desea salir?", 
+						 "Advertencia", JOptionPane.YES_NO_OPTION);     
 					    if (confirmed == JOptionPane.YES_OPTION) {
 					      dispose();
 					    }
 			}
 		});
+		
 		setType(Type.UTILITY);
 		setTitle("Cliente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 546, 515);
+		setBounds(100, 100, 666, 532);
 		contentPane = new JPanel();
 		contentPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setContentPane(contentPane);
@@ -151,6 +150,23 @@ public class FrmCliente extends JFrame {
 		lblTelfono.setBounds(10, 210, 75, 14);
 		contentPane.add(lblTelfono);
 		
+		JLabel lblCliente = new JLabel("Cliente");
+		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblCliente.setBounds(10, 11, 75, 14);
+		contentPane.add(lblCliente);
+		
+		JLabel lblListarClientes = new JLabel("Listar clientes:");
+		lblListarClientes.setBounds(10, 265, 89, 14);
+		contentPane.add(lblListarClientes);
+		
+		JLabel lblMantenimiento = new JLabel("Mantenimiento");
+		lblMantenimiento.setBounds(491, 25, 86, 14);
+		contentPane.add(lblMantenimiento);
+		
+		JLabel lblCantidadDeClientes = new JLabel("Cantidad de clientes:");
+		lblCantidadDeClientes.setBounds(10, 470, 150, 14);
+		contentPane.add(lblCantidadDeClientes);
+		
 		txtCodCliente = new JTextField();
 		txtCodCliente.setBounds(95, 60, 100, 20);
 		contentPane.add(txtCodCliente);
@@ -176,12 +192,11 @@ public class FrmCliente extends JFrame {
 		contentPane.add(txtTelfCliente);
 		txtTelfCliente.setColumns(10);
 		
-		tablaCliente = new JTable();
 		JDCFechaReg.setDateFormatString("yyyy/MM/dd");
-		
-		JDCFechaReg.setBounds(95, 179, 100, 20);
+		JDCFechaReg.setBounds(95, 179, 122, 20);
 		contentPane.add(JDCFechaReg);
-	
+		
+		tablaCliente = new JTable();
 		tablaCliente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {			
@@ -205,7 +220,6 @@ public class FrmCliente extends JFrame {
 						txtApMaternoCliente.getText(),
 						JDCFechaReg.getDate(),
 						txtTelfCliente.getText());
-	
 					ObjC.InsertarCliente(ObjP);
 					Inicializar();
 					CargarJTable();
@@ -213,7 +227,7 @@ public class FrmCliente extends JFrame {
 					JOptionPane.showMessageDialog(null,"El cliente se añadió con éxito");
 			}
 		});
-		btnNuevo.setBounds(370, 60, 116, 23);
+		btnNuevo.setBounds(458, 60, 150, 23);
 		contentPane.add(btnNuevo);
 		
 		JButton btnEditar = new JButton("Editar");
@@ -227,13 +241,13 @@ public class FrmCliente extends JFrame {
 						JDCFechaReg.getDate(),
 						txtTelfCliente.getText());
 				ObjC.ModificarCliente(ObjP);
+				LimpiarCajas();
 				Inicializar();
-				CargarJTable();
-				LimpiarCajas();	
+				CargarJTable();	
 				JOptionPane.showMessageDialog(null,"Cliente moodificado");
 			}
 		});
-		btnEditar.setBounds(370, 120, 116, 23);
+		btnEditar.setBounds(458, 120, 150, 23);
 		contentPane.add(btnEditar);
 		
 		JButton btnBuscar = new JButton("Buscar");
@@ -245,7 +259,7 @@ public class FrmCliente extends JFrame {
 				LimpiarCajas();	
 			}
 		});
-		btnBuscar.setBounds(370, 90, 116, 23);
+		btnBuscar.setBounds(458, 90, 150, 23);
 		contentPane.add(btnBuscar);
 		
 		JButton btnEliminar = new JButton("Eliminar");
@@ -254,59 +268,42 @@ public class FrmCliente extends JFrame {
 				ObjC.EliminarCliente(txtCodCliente.getText());
 				Inicializar();
 				CargarJTable();			
-				LimpiarCajas();	
+				LimpiarCajas();
 				JOptionPane.showMessageDialog(null,"Cliente eliminado");
 			}
 		});
-		btnEliminar.setBounds(370, 150, 116, 23);
+		btnEliminar.setBounds(458, 150, 150, 23);
 		contentPane.add(btnEliminar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(370, 180, 116, 23);
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		btnCancelar.setBounds(458, 180, 150, 23);
 		contentPane.add(btnCancelar);
-		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(334, 42, 186, 217);
-		contentPane.add(panel);
-		
-		JLabel lblCliente = new JLabel("Cliente");
-		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblCliente.setForeground(new Color(0, 0, 0));
-		lblCliente.setBounds(237, 11, 58, 14);
-		contentPane.add(lblCliente);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(20, 298, 490, 152);
+		scrollPane.setBounds(20, 298, 608, 152);
 		scrollPane.setViewportView(tablaCliente);
 		contentPane.add(scrollPane);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
-		panel_1.setBounds(10, 288, 510, 177);
+		panel_1.setBounds(10, 288, 630, 177);
 		contentPane.add(panel_1);
 		
-		JLabel lblListarClientes = new JLabel("Listar clientes:");
-		lblListarClientes.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblListarClientes.setBackground(SystemColor.menu);
-		lblListarClientes.setBounds(20, 273, 89, 14);
-		contentPane.add(lblListarClientes);
+		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_2.setBounds(419, 42, 221, 217);
+		contentPane.add(panel_2);
 		
-		JLabel lblMantenimiento = new JLabel("Mantenimiento");
-		lblMantenimiento.setBounds(384, 25, 86, 14);
-		contentPane.add(lblMantenimiento);
-		lblMantenimiento.setBackground(SystemColor.control);
-		lblMantenimiento.setFont(new Font("Tahoma", Font.BOLD, 11));
-		
-		JLabel lblCantidadDeClientes = new JLabel("Cantidad de clientes:");
-		lblCantidadDeClientes.setBounds(334, 273, 116, 14);
-		contentPane.add(lblCantidadDeClientes);
-			
 		// Llamar a Inicializar y VerRegistro	 
 		Inicializar();
 		CargarJTable();
 		
 	}
 }
+

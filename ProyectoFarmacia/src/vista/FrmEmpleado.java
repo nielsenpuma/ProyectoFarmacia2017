@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,8 +25,14 @@ import controlador.CCliente;
 import controlador.CEmpleado;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.awt.event.MouseEvent;
 
-public class FrmEmpleado extends JFrame {
+public class FrmEmpleado extends JFrame implements ActionListener, MouseListener {
 	
 	// Campos o atributos
 		private CEmpleado ObjC = new CEmpleado();
@@ -43,9 +51,16 @@ public class FrmEmpleado extends JFrame {
 	private JPanel panel_1;
 	private JDateChooser dcNac;
 	private JDateChooser dcIng;
+	private JButton btnNuevo;
+	private JButton btnInsertar;
+	private JButton btnBuscar;
+	private JButton btnModificar;
+	private JButton btnEliminar;
 	
-	
-	
+	public void Inicializar(){
+	MiLista = new ArrayList<>();
+	MiLista = ObjC.Listar();
+	}
 	
 	public void LimpiarCajas(){
 		txtCodigo.setText("");
@@ -65,8 +80,7 @@ public class FrmEmpleado extends JFrame {
 	
 	// Cargar el JTable
 		public void CargarJTable(){
-			MiLista = new ArrayList<>();
-			MiLista = ObjC.Listar();
+		
 			
 			MiTabla = new DefaultTableModel();
 			// Cargar los nombres de Columnas
@@ -219,6 +233,7 @@ public class FrmEmpleado extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(this);
 		scrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
@@ -232,23 +247,28 @@ public class FrmEmpleado extends JFrame {
 			contentPane.add(panel_1);
 			panel_1.setLayout(null);
 			
-			JButton btnNuevo = new JButton("NUEVO");
+			btnNuevo = new JButton("NUEVO");
+			btnNuevo.addActionListener(this);
 			btnNuevo.setBounds(25, 50, 180, 23);
 			panel_1.add(btnNuevo);
 			
-			JButton btnBuscar = new JButton("BUSCAR");
+			btnBuscar = new JButton("BUSCAR");
+			btnBuscar.addActionListener(this);
 			btnBuscar.setBounds(25, 84, 180, 23);
 			panel_1.add(btnBuscar);
 			
-			JButton btnInsertar = new JButton("INSERTAR");
+			btnInsertar = new JButton("INSERTAR");
+			btnInsertar.addActionListener(this);
 			btnInsertar.setBounds(25, 118, 180, 23);
 			panel_1.add(btnInsertar);
 			
-			JButton btnModificar = new JButton("MODIFICAR");
+			btnModificar = new JButton("MODIFICAR");
+			btnModificar.addActionListener(this);
 			btnModificar.setBounds(25, 152, 180, 23);
 			panel_1.add(btnModificar);
 			
-			JButton btnEliminar = new JButton("ELIMINAR");
+			btnEliminar = new JButton("ELIMINAR");
+			btnEliminar.addActionListener(this);
 			btnEliminar.setBounds(25, 186, 180, 23);
 			panel_1.add(btnEliminar);
 		}
@@ -265,10 +285,138 @@ public class FrmEmpleado extends JFrame {
 			contentPane.add(dcIng);
 		}
 		
-		
+	
 		//cargar inicialmente el formulario
+	
 		MiLista= new ArrayList<>();
 		MiLista=ObjC.Listar();
 		CargarJTable();
+	
+		
+	}
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnEliminar) {
+			actionPerformedBtnEliminar(arg0);
+		}
+		if (arg0.getSource() == btnModificar) {
+			actionPerformedBtnModificar(arg0);
+		}
+		if (arg0.getSource() == btnBuscar) {
+			actionPerformedBtnBuscar(arg0);
+		}
+		if (arg0.getSource() == btnInsertar) {
+			actionPerformedBtnInsertar(arg0);
+		}
+		if (arg0.getSource() == btnNuevo) {
+			actionPerformedBtnNuevo(arg0);
+		}
+	}
+	protected void actionPerformedBtnNuevo(ActionEvent arg0) {
+		
+		LimpiarCajas();
+	}
+	public void mouseClicked(MouseEvent arg0) {
+		if (arg0.getSource() == table) {
+			mouseClickedTable(arg0);
+		}
+	}
+	public void mouseEntered(MouseEvent arg0) {
+	}
+	public void mouseExited(MouseEvent arg0) {
+	}
+	public void mousePressed(MouseEvent arg0) {
+	}
+	public void mouseReleased(MouseEvent arg0) {
+	}
+	protected void mouseClickedTable(MouseEvent arg0) {
+		
+		int fila = table.getSelectedRow();
+		txtCodigo.setText(MiLista.get(fila).getCod_emp());
+		txtNombre.setText(MiLista.get(fila).getNom_emp());
+		txtPat.setText(MiLista.get(fila).getApat_emp());
+		txtMat.setText(MiLista.get(fila).getAmat_emp());
+		dcNac.setDate(MiLista.get(fila).getFec_nac_emp());
+		dcIng.setDate(MiLista.get(fila).getFec_ing_emp());
+		txtCodCargo.setText(String.valueOf(MiLista.get(fila).getCod_cargo()));
+		txtusuario.setText(MiLista.get(fila).getUser_emp());
+		txtpassword.setText(MiLista.get(fila).getPass_emp());
+	}
+	protected void actionPerformedBtnInsertar(ActionEvent arg0) {
+
+
+		
+		EEmpleado obj= new EEmpleado(
+				txtCodigo.getText(),
+				txtNombre.getText(),
+				txtPat.getText(),
+				txtMat.getText(),
+				dcNac.getDate(),
+				dcIng.getDate(),
+				txtusuario.getText(),
+				txtCodCargo.getText(),
+				Integer.parseInt(txtCodCargo.getText()));
+				
+				ObjC.Insertar(obj);
+				CargarJTable();
+				Inicializar();
+				JOptionPane.showMessageDialog(null,"***EMPLEADO AÑADIDO***");
+				LimpiarCajas();
+		
+
+	}
+	
+		protected void actionPerformedBtnBuscar(ActionEvent arg0) {
+		
+			//recuperar la fila con el valor ingresado en txtIdProducto
+			EEmpleado obja= ObjC.Buscar(txtCodigo.getText());
+			
+			//si lo encontro visualizar la informacion del producto
+			if(obja !=null){
+				txtCodigo.setText(obja.getCod_emp());
+				txtNombre.setText(obja.getNom_emp());
+				txtPat.setText(obja.getApat_emp());
+				txtMat.setText(obja.getAmat_emp());
+				dcNac.setDate(obja.getFec_nac_emp());
+				dcIng.setDate(obja.getFec_ing_emp());
+				txtCodCargo.setText(String.valueOf(obja.getCod_cargo()));
+				txtusuario.setText(obja.getUser_emp());
+				txtpassword.setText(obja.getPass_emp());
+			}else{
+							JOptionPane.showMessageDialog(null,"ERROR,CODIGO NO EXISTE");
+							LimpiarCajas();
+						}
+	
+	
+		}	
+		
+	protected void actionPerformedBtnModificar(ActionEvent arg0) {
+		
+		EEmpleado ObjP = new EEmpleado(
+				txtCodigo.getText(),
+				txtNombre.getText(),
+				txtPat.getText(),
+				txtMat.getText(),
+				dcNac.getDate(),
+				dcIng.getDate(),
+				txtusuario.getText(),
+				txtCodCargo.getText(),
+				Integer.parseInt(txtCodCargo.getText()));
+				
+		ObjC. ModificarEmpleado(ObjP);
+		JOptionPane.showMessageDialog(null,"***EMPLEADO MODIFICADO***");
+		Inicializar();
+		CargarJTable();
+		LimpiarCajas();	
+
+		
+	}
+	protected void actionPerformedBtnEliminar(ActionEvent arg0) {
+		
+		ObjC.EliminarEmpleado(txtCodigo.getText());
+		LimpiarCajas();
+		CargarJTable();
+		JOptionPane.showMessageDialog(null,"***EMPLEADO RETIRADO***");
+		Inicializar();
+		
 	}
 }

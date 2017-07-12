@@ -55,43 +55,40 @@ public class MProducto {
 		}
 		return Lista;
 	}
-	// Método para buscar
-			public ArrayList<EProducto> BuscarProducto(String des){
-				des="%"+des+"%";
-				EProducto Obj =null;
-				Lista = new ArrayList<>();
-				Obj = null;
+	public EProducto BuscarProducto(String des){
+				EProducto Obj = null;
 				String SQL = "CALL BuscarProducto(?)";
 				try {
 						Stm = cn.prepareCall(SQL);
 						Stm.setString(1, des);
 						Rs = Stm.executeQuery();
 						if(Rs.next()){
-							//Laboratorio
-							ELaboratorio x = new ELaboratorio();
-							x.setDesc_lab(Rs.getString("DESC_LAB"));
-							//Categoria
-							ECategoria c = new ECategoria();
-							c.setDesc_cat(Rs.getString("DESC_CAT"));	
-							Obj = new EProducto(
-									Rs.getString("COD_PRO"),
-									Rs.getString("DESC_PRO"),
-									Rs.getDouble("PRE_PRO"),
-									Rs.getInt("STK_ACT"),
-									Rs.getInt("STK_MIN"),
-									Rs.getString("UNI_MED"),
-									Rs.getString("FEC_VENC"),
-									new ELaboratorio(x.getCod_lab(),x.getDesc_lab()),
-									new ECategoria(c.getCod_cat(),c.getDesc_cat())
+									//Laboratorio
+									ELaboratorio x = new ELaboratorio();
+									x.setCod_lab(Rs.getInt("COD_LAB"));
+									//Categoria
+									ECategoria c = new ECategoria();
+									c.setCod_cat(Rs.getInt("COD_CAT"));	
+									Obj = new EProducto(
+											Rs.getString("COD_PRO"),
+											Rs.getString("DESC_PRO"),
+											Rs.getDouble("PRE_PRO"),
+											Rs.getInt("STK_ACT"),
+											Rs.getInt("STK_MIN"),
+											Rs.getString("UNI_MED"),
+											Rs.getString("FEC_VENC"),
+											new ELaboratorio(x.getCod_lab(),x.getDesc_lab()),
+											new ECategoria(c.getCod_cat(),c.getDesc_cat())
 								);
-							Lista.add(Obj);
 						}
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
-				return Lista;
-			}
-			// Método para modificar
+				return Obj;
+		}
+		
+		
+	// Método para modificar
 			public void ModificarProducto(EProducto ObjP){
 				String SQL = "CALL ModificarProducto(?,?,?,?,?,?,?,?,?)";
 				try {
