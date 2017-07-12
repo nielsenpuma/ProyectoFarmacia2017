@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
-public class FrmLogin extends JFrame implements ActionListener {
+public class FrmLogin01 extends JFrame implements ActionListener {
 	
 	private CEmpleado objE = new CEmpleado();
 	private EEmpleado emp;
@@ -38,7 +38,7 @@ public class FrmLogin extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrmLogin frame = new FrmLogin();
+					FrmLogin01 frame = new FrmLogin01();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,7 +50,7 @@ public class FrmLogin extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public FrmLogin() {
+	public FrmLogin01() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

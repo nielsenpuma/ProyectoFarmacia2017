@@ -172,7 +172,7 @@ public class FrmProducto extends JFrame implements ActionListener, MouseListener
 	 * Create the frame.
 	 */
 	public FrmProducto() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 830, 490);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -184,7 +184,7 @@ public class FrmProveedorMD extends JFrame implements ActionListener, MouseListe
 	 */
 	public FrmProveedorMD() {
 		setTitle("Proveedores");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 744, 456);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -574,6 +574,8 @@ public class FrmProveedorMD extends JFrame implements ActionListener, MouseListe
 		if(rpta==JOptionPane.YES_OPTION){
 			ObjC.Eliminar(txtCodigo.getText());
 			CargarTabla();
+		}else{
+			inhabilitar();
 		}
 		
 	}

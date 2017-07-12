@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -27,8 +28,10 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class FrmProveedor extends JFrame implements MouseListener {
+public class FrmProveedor extends JFrame implements MouseListener, ActionListener {
 
 	// Campos o Atributos
 	private CProveedor ObjC = new CProveedor();
@@ -58,6 +61,7 @@ public class FrmProveedor extends JFrame implements MouseListener {
 	private JComboBox cmbPrv;
 	private JTable tablaProveedor;
 	private JScrollPane scrollPane;
+	private JTextField txtProveedor;
 
 	/**
 	 * Launch the application.
@@ -115,7 +119,7 @@ public class FrmProveedor extends JFrame implements MouseListener {
 	 * Create the frame.
 	 */
 	public FrmProveedor() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 564, 484);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -173,16 +177,19 @@ public class FrmProveedor extends JFrame implements MouseListener {
 			panel.setLayout(null);
 			{
 				btnNuevo = new JButton("Nuevo");
+				btnNuevo.addActionListener(this);
 				btnNuevo.setBounds(21, 22, 89, 23);
 				panel.add(btnNuevo);
 			}
 			{
 				btnEditar = new JButton("Editar");
+				btnEditar.addActionListener(this);
 				btnEditar.setBounds(21, 56, 89, 23);
 				panel.add(btnEditar);
 			}
 			{
 				btnGuardar = new JButton("Guardar");
+				btnGuardar.addActionListener(this);
 				btnGuardar.setBounds(21, 89, 89, 23);
 				panel.add(btnGuardar);
 			}
@@ -228,6 +235,19 @@ public class FrmProveedor extends JFrame implements MouseListener {
 			AutoCompleteDecorator.decorate(this.cmbPrv);
 			contentPane.add(cmbPrv);
 		}
+		{
+			txtProveedor = new JTextField();
+			txtProveedor.setVisible(false);
+			txtProveedor.setText("Proveedor");
+			txtProveedor.setBounds(95, 61, 210, 26);
+			contentPane.add(txtProveedor);
+			txtProveedor.setColumns(10);
+		}
+		
+		//txtCodPrv.setEditable(false);
+		txtCodPrv.setEnabled(false);
+		txtDireccion.setEnabled(false);
+		txtTelefono.setEnabled(false);
 
 		// cargando al inicio los datos en la tabla
 		MiLista = new ArrayList<>();
@@ -260,5 +280,81 @@ public class FrmProveedor extends JFrame implements MouseListener {
 			
 			cmbPrv.setSelectedItem(tablaProveedor.getValueAt(filaSelect, 1));
 		}
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnEditar) {
+			actionPerformedBtnEditar(e);
+		}
+		if (e.getSource() == btnGuardar) {
+			actionPerformedBtnGuardar(e);
+		}
+		if (e.getSource() == btnNuevo) {
+			actionPerformedBtnNuevo(e);
+		}
+	}
+	protected void actionPerformedBtnNuevo(ActionEvent e) {
+		txtCodPrv.setText("");
+		txtDireccion.setText("");
+		txtTelefono.setText("");
+		
+		txtProveedor.setText("");
+		txtProveedor.setVisible(true);
+		cmbPrv.setVisible(false);
+		txtCodPrv.setEnabled(true);
+		txtDireccion.setEnabled(true);
+		txtTelefono.setEnabled(true);
+	}
+	protected void actionPerformedBtnGuardar(ActionEvent e) {
+		EProveedor obj;
+		
+		if(txtCodPrv.getText().equals("")){
+			JOptionPane.showMessageDialog(this, "Ingrese Código");
+		}else{
+			obj = new EProveedor(
+					txtCodPrv.getText(),
+					txtProveedor.getText(),
+					txtDireccion.getText(),
+					txtTelefono.getText()
+					);
+			ObjC.Insertar(obj);
+			
+			//Limpiando cajas
+			txtCodPrv.setText("");
+			txtProveedor.setText("");
+			txtDireccion.setText("");
+			txtTelefono.setText("");
+			
+			llenarCombo();
+			cmbPrv.setVisible(true);
+			txtProveedor.setVisible(false);
+			txtCodPrv.setEnabled(false);
+			
+			//Actualizando tabla
+			MiLista = ObjC.Listar();
+			CargarJTable();
+		}
+	}
+	protected void actionPerformedBtnEditar(ActionEvent e) {
+		int seleccion = tablaProveedor.getSelectedRow();
+		cmbPrv.setVisible(false);
+		txtProveedor.setVisible(true);
+		//txtProveedor.setText("");
+		if(seleccion!=-1){
+			EProveedor obj=new EProveedor(
+					txtCodPrv.getText(),
+					txtProveedor.getText(),
+					txtDireccion.getText(),
+					txtTelefono.getText()
+					
+					);
+			
+			
+			ObjC.Modificar(obj);
+		}else{
+			JOptionPane.showMessageDialog(this, "Selecciones Proveedor");
+		}
+		
+		
+		
 	}
 }

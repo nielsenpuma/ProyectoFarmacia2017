@@ -361,6 +361,10 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 				Inicializar();
 				JOptionPane.showMessageDialog(null,"***EMPLEADO AÑADIDO***");
 				LimpiarCajas();
+				
+				MiLista = ObjC.Listar();
+				CargarJTable();
+				
 		
 
 	}
@@ -411,12 +415,20 @@ public class FrmEmpleado extends JFrame implements ActionListener, MouseListener
 		
 	}
 	protected void actionPerformedBtnEliminar(ActionEvent arg0) {
+		int fila = table.getSelectedRow();
+		if(fila != -1){
 		
-		ObjC.EliminarEmpleado(txtCodigo.getText());
-		LimpiarCajas();
-		CargarJTable();
-		JOptionPane.showMessageDialog(null,"***EMPLEADO RETIRADO***");
-		Inicializar();
+			ObjC.EliminarEmpleado(txtCodigo.getText());
+			LimpiarCajas();
+			CargarJTable();
+			JOptionPane.showMessageDialog(null,"***EMPLEADO RETIRADO***");
+			Inicializar();
+			
+			MiLista = ObjC.Listar();
+			CargarJTable();
+		}else{
+			JOptionPane.showMessageDialog(rootPane, "Seleccione una fila");
+		}
 		
 	}
 }
